@@ -4,6 +4,7 @@ import re, csv
 
 
 control_catalog = {}
+guidance_catalog = {}
 
 def convert_control_number(control_number):
     parens = ['(', ')']
@@ -50,7 +51,11 @@ def convert_control_number(control_number):
 
 def add_main_controls_to_catalog(control):
     first_statement = control.get('statement')
-    
+    supplemental_guidance = ""
+    if control.get('supplemental-guidance'):
+        if control.get('supplemental-guidance').get('description'):
+            supplemental_guidance = control.get('supplemental-guidance').get('description')
+        
     if first_statement.get('statement'):
         second_statement = first_statement.get('statement')
         for statement in second_statement:
@@ -60,16 +65,22 @@ def add_main_controls_to_catalog(control):
                     statements = (first_statement, statement, final_statement_dict)
                     description = ' '.join(list(map(get_description, statements)))
                     control_catalog[control_number] = description
+                    if supplemental_guidance:
+                        guidance_catalog[control_number] = supplemental_guidance
             else:
                 control_number = convert_control_number(statement.get('number'))
                 statements = (first_statement, statement)
                 description = ' '.join(list(map(get_description, statements)))
                 control_catalog[control_number] = description
+                if supplemental_guidance:
+                    guidance_catalog[control_number] = supplemental_guidance
 
     else:
         control_number = convert_control_number(control.get('number'))
         description = get_description(first_statement)
         control_catalog[control_number] = description
+        if supplemental_guidance:
+            guidance_catalog[control_number] = supplemental_guidance
 
 
 def get_description(statement):
@@ -80,6 +91,10 @@ def add_enhancements_to_catalog(control):
     if control.get('control-enhancements'):
         for enhancement in control.get('control-enhancements').get('control-enhancement'):
             try:
+                supplemental_guidance = ''
+                if enhancement.get('supplemental-guidance'):
+                    if enhancement.get('supplemental-guidance').get('description'):
+                        supplemental_guidance = enhancement.get('supplemental-guidance').get('description')
                 first_statement = enhancement.get('statement')
                 if first_statement.get('statement'):
                     for second_statement in first_statement.get('statement'):
@@ -89,20 +104,27 @@ def add_enhancements_to_catalog(control):
                                 control_number = convert_control_number(final_statement_dict.get('number'))
                                 description = ' '.join(list(map(get_description, statements)))
                                 control_catalog[control_number] = description
+                                if supplemental_guidance:
+                                    guidance_catalog[control_number] = supplemental_guidance
                         else:
                             control_number = convert_control_number(second_statement.get('number'))
                             statements = (first_statement, second_statement)
                             description = ' '.join(list(map(get_description, statements)))
                             control_catalog[control_number] = description
-
+                            if supplemental_guidance:
+                                guidance_catalog[control_number] = supplemental_guidance
                 else:
                     control_number = convert_control_number(enhancement.get('number'))
                     description = get_description(first_statement)
                     control_catalog[control_number] = description
+                    if supplemental_guidance:
+                        guidance_catalog[control_number] = supplemental_guidance
             except:
                 control_number = convert_control_number(control.get('control-enhancements').get('control-enhancement').get('number'))
                 description = get_description(control.get('control-enhancements').get('control-enhancement').get('statement'))
                 control_catalog[control_number] = description
+                if supplemental_guidance:
+                    guidance_catalog[control_number] = supplemental_guidance
 
 with open('800-53-controls.xml') as controls_xml:
     control_dict = xmltodict.parse(controls_xml.read())
@@ -120,15 +142,17 @@ for control, description in control_catalog.items():
     if description == None:
         print("Control description blank: " + control)
     
-with open('control-list.csv','w', newline='') as f:
+with open('test-control-list.csv','w', newline='') as f:
     w = csv.writer(f)
     w.writerows(control_catalog.items())
+
+with open('control_guidance_list.csv', 'w', newline='') as f:
+    w = csv.writer(f)
+    w.writerows(guidance_catalog.items())
 print("Done")
-        # get_description(control)
-        # get_enhancements(control)
 
 
-    
+
 
 
 
