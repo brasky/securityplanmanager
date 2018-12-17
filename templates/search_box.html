@@ -1,0 +1,21 @@
+{% load static  %}
+<head>
+<title>Control Search</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<script src="{% static 'ssp_dev/jquery-2.0.0.min.js'  %}"></script>
+<script src="{% static 'ssp_dev/ajax.js'  %}"></script>
+
+
+<h1 class="page-header text-center">NIST Control Search</h1>
+{% csrf_token  %}
+<div class="col-xs-6" style="margin: 0 auto; float: none;">
+<input type="text" class="form-control" id="search" name="search" />
+</div>
+<div class="container" style="width: 50%;">
+<ul id="search-results" class="list-group">
+
+
+</ul>	
+
+</div>
