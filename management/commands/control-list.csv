@@ -115,7 +115,8 @@ AC-11(a),The information system: Prevents further access to the system by initia
 AC-11(b),The information system: Retains the session lock until the user reestablishes access using established identification and authentication procedures.
 AC-11 (1),"The information system conceals, via the session lock, information previously visible on the display with a publicly viewable image."
 AC-12,The information system automatically terminates a user session after [Assignment: organization-defined conditions or trigger events requiring session disconnect].
-AC-12 (1),The information system:
+AC-12 (1)(a),The information system: Provides a logout capability for user-initiated communications sessions whenever authentication is used to gain access to [Assignment: organization-defined information resources]; and
+AC-12 (1)(b),The information system: Displays an explicit logout message to users indicating the reliable termination of authenticated communications sessions.
 AC-13,[Withdrawn: Incorporated into AC-2 and AU-6].
 AC-14(a),The organization: Identifies [Assignment: organization-defined user actions] that can be performed on the information system without identification or authentication consistent with organizational missions/business functions; and
 AC-14(b),"The organization: Documents and provides supporting rationale in the security plan for the information system, user actions not requiring identification or authentication."

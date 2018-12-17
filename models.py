@@ -3,7 +3,7 @@ from django.db import models
 class Control(models.Model):
 	number = models.CharField(max_length=20, unique=True)
 	control_text = models.TextField()
-
+	supplemental_guidance = models.TextField()
 	def __str__(self):
 		return self.number	
 

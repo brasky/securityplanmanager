@@ -1,11 +1,30 @@
 {% if controls  %}
 
 {% for control in controls %}
-{%with control|first as text %}
+{% if control.3 %}
+	<a href="javascript:;" class="list-group-item">
 
-	<li class="list-group-item"> {{ text }} </p>
-{% endwith %}
 
+	<li class="list-unstyled" id="{{ control.0 }}"><span class="hasGuidance">* </span><span class="control-name">{{ control.1 }}: </span><span class="control-text">{{control.2}}</span>
+
+{% else %}
+
+<li class="list-group-item" id="{{ control.0 }}"><span class="control-name">{{ control.1 }}: </span><span class="control-text">{{control.2}}</span>
+
+{% endif %}
+
+	
+{% if control.3  %}
+	<div id="guidance-{{control.0}}" class="hidden">
+		<ul>
+		<li class="list-group-item list-group-item-warning"><div class="guidance-header">Supplemental Guidance:</div>{{ control.3  }} </li>
+	</ul>
+</div>
+{% endif  %}
+	</li>
+{% if control.3 %}	
+	</a>
+{% endif %}
 {% endfor  %}
 
 {% else  %}
