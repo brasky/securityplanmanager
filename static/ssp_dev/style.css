@@ -1,0 +1,33 @@
+.control-name {
+	font-weight: bold;
+}
+
+.control-text {
+
+}
+
+div > ul {
+	padding-left:0;
+	
+}
+
+input.form-control {
+	
+	border-radius: 4px 4px 0px 0px;
+
+}
+
+a.list-group-item:first-child {
+	
+	border-radius: 0px 0px 4px 4px;
+
+}
+
+span.hasGuidance {
+	color:#8a6d3b;
+	display:none;
+}
+
+span.query {
+	background-color: yellow;
+}
