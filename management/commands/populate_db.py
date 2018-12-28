@@ -7,7 +7,7 @@ class Command(BaseCommand):
 	help = 'Fill the database with controls'
 	def handle(self, *Args, **options):
 		Control.objects.all().delete()
-		control_list_file = csv.reader(open('/home/elliot/ssp_dev/ssp_dev/control_search/management/commands/control-list.csv', 'r'))
+		control_list_file = csv.reader(open('control_search\management\commands\control-list.csv', 'r'))
 		control_list = dict(control_list_file)
 #		control_numbers, control_text = get_control()
 		controls_created = 0

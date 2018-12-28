@@ -6,7 +6,7 @@ import os
 class Command(BaseCommand):
 	help = 'Populate control guidance fields'
 	def handle(self, *Args, **options):
-		control_list_file = csv.reader(open('/home/elliot/ssp_dev/ssp_dev/control_search/management/commands/control_guidance_list.csv', 'r'))
+		control_list_file = csv.reader(open('control_search\management\commands\control_guidance_list.csv', 'r'))
 		control_list = dict(control_list_file)
 		for num, text in control_list.items():
 			control_object = Control.objects.filter(number=num).get()
