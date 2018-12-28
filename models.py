@@ -52,6 +52,12 @@ class Implementation(models.Model):
 	
 	teams = models.ManyToManyField(Team,related_name='teams', default=team_default)	
 
+	def status_verbose(self):
+		return dict(Implementation.IMPLEMENTATION_STATUS_CHOICES)[self.implementation_status]
+
+	def origination_verbose(self):
+		return dict(Implementation.CONTROL_ORIGINATION_CHOICES)[self.control_origination]
+
 	def __str__(self):
 		team_object_list = list(self.teams.all())
 		team_list = [team.name for team in team_object_list]

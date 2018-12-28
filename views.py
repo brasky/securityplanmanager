@@ -1,10 +1,10 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
-from .models import Control
+from .models import Control, Implementation
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from functools import lru_cache
-
+import re
 
 #@lru_cache(maxsize=128)
 def get_all_controls():
@@ -17,6 +17,12 @@ def get_all_controls():
 		control_name_plus_text.append(control.number + ": " + control.control_text)
 		control_guidance[control.number] = control.supplemental_guidance
 	return control_name_plus_text, control_text, control_guidance
+
+def highlight_matches(query, text):
+	def span_matches(match):
+		html = '<span class="query">{0}</span>'
+		return html.format(match.group(0))
+	return re.sub(query, span_matches, text, flags=re.I)
 
 def index(request):
 	args = {}
@@ -41,12 +47,19 @@ def search(request):
 		temp_result.append(counter)
 		counter += 1
 		temp_result.append(control)
-		temp_result.append(control_dict[control])
+		if len(search_text) > 2:		
+			control_text = highlight_matches(search_text, control_dict[control])
+		else:
+			control_text = control_dict[control]
+		temp_result.append(control_text)
 		temp_result.append(control_guidance[control])
 		results.append(temp_result)
 
 	return render_to_response('ajax_search.html', {'controls': results})
 
-
+def implementations(request):
+	all_implementations = list(Implementation.objects.all())
+	
+	return render(request, 'implementations.html', {'implementations': all_implementations})
 
 

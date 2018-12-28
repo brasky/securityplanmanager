@@ -1,10 +1,11 @@
-{% load static  %}
+{% extends "base.html" %}
+
+{% block content %}
+{%load static%}
 <head>
 <title>Control Search</title>
 </head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="{% static 'ssp_dev/style.css'  %}">
-<script src="{% static 'ssp_dev/jquery-2.0.0.min.js'  %}"></script>
+<body>
 <script src="{% static 'ssp_dev/ajax.js'  %}"></script>
 
 
@@ -20,3 +21,5 @@
 </ul>	
 
 </div>
+</body>
+{% endblock content %}
