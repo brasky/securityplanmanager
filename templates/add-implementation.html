@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+<title>Add Implementations</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Add Implementation</h1>
+<body>
+<form action="/controls/implementations/add" method="post">
+    {% csrf_token %}
+    {{ form }}
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+
+
+{% endblock content %}
+
