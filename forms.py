@@ -1,9 +1,13 @@
 from django import forms
-from .models import Control
+from django.forms import ModelForm
 
-class AddImplementationForm(forms.Form):
+from .models import Control, Implementation
+
+class AddImplementationForm(ModelForm):
     """
     Form for adding implementations
     """
-    control = forms.ModelChoiceField(queryset=Control.objects.all())
-    
+
+    class Meta:
+        model = Implementation
+        fields = ['control', 'parameter', 'customer_responsibility', 'solution', 'implementation_status', 'control_origination', 'teams']

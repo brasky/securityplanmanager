@@ -6,6 +6,9 @@ from fuzzywuzzy import process
 from functools import lru_cache
 import re
 from .forms import *
+from django.contrib import messages
+from django.shortcuts import redirect
+
 
 #@lru_cache(maxsize=128)
 def get_all_controls():
@@ -58,16 +61,22 @@ def search(request):
 
     return render_to_response('ajax_search.html', {'controls': results})
 
-def implementations(request):
-    all_implementations = list(Implementation.objects.all())
-    
-    return render(request, 'implementations.html', {'implementations': all_implementations})
+def implementations(request, control_pk):
+    control = Control.objects.get(pk=control_pk)
+    all_implementations = Implementation.objects.all().filter(control = control)
+    print(all_implementations)
+    return render(request, 'implementations.html', {'control': control, 'implementations': all_implementations, 'pk':control_pk})
 
-def add_implementation(request):
+def add_implementation(request, control_pk):
+    control = Control.objects.get(pk=control_pk)
+    data = {'control': control}
+    form = AddImplementationForm(initial=data)
     if request.method == "POST":
         form = AddImplementationForm(request.POST)
-        # if form.is_valid():
-    else:
-        form = AddImplementationForm()
-    return render(request, 'add-implementation.html', {'form': form})
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Implementation added successfully')
+            return redirect('/controls/implementations/' + str(control_pk))
+
+    return render(request, 'add-implementation.html', {'form': form, 'pk': control_pk})
 
