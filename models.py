@@ -63,3 +63,16 @@ class Implementation(models.Model):
         team_list = [team.name for team in team_object_list]
         name = self.control.number + " - " + ' '.join(team_list)
         return name
+
+class Certification(models.Model):
+    
+    name = models.CharField(max_length = 30, unique = True)
+    controls = models.ManyToManyField(Control, related_name='controls')
+    implementations = models.ManyToManyField(Implementation, related_name='implementations', blank=True)
+    
+    @classmethod
+    def associate_implementations(self, controls):
+        print(cls.controls.all())
+
+    def __str__(self):
+        return self.name

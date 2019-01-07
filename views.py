@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
-from .models import Control, Implementation
+from .models import Control, Implementation, Certification
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from functools import lru_cache
@@ -95,17 +95,17 @@ def edit_implementations(request, control_pk):
     # data = {'control': control, 'parameter': 'test'}
 
     ImplementationFormSet = modelformset_factory(Implementation, fields = ['control', 'parameter', 'customer_responsibility',
-                  'solution', 'implementation_status', 'control_origination', 'teams'], can_delete=True)
+                  'solution', 'implementation_status', 'control_origination', 'teams'], can_delete=True, extra=1)
     formset = ImplementationFormSet(queryset=Implementation.objects.filter(control=control), initial=[{'control': control}])
     if request.method == "POST":
         
         form = ImplementationFormSet(request.POST)
-        
+        print('wtffff1f')
+        print(form.errors)
         if form.is_valid():
-            new_instances = form.save(commit=False)
-            for instance in new_instances:
-                instance.control = control
-                instance.save()
+            print('wtfffff')
+            form.save()
+
             
             messages.success(request, 'Implementation(s) edited successfully')
             return redirect('/controls/implementations/' + str(control_pk))
@@ -120,3 +120,6 @@ def edit_implementations(request, control_pk):
     # form = EditImplementationsFormSet(queryset=Implementation.objects.filter(control=control))
 
     return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})
+
+def certifications(request):
+    certification = Certification.objects.get(pk=1)
