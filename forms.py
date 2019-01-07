@@ -3,6 +3,7 @@ from django.forms import ModelForm
 
 from .models import Control, Implementation
 
+
 class AddImplementationForm(ModelForm):
     """
     Form for adding implementations
@@ -10,4 +11,12 @@ class AddImplementationForm(ModelForm):
 
     class Meta:
         model = Implementation
-        fields = ['control', 'parameter', 'customer_responsibility', 'solution', 'implementation_status', 'control_origination', 'teams']
+        fields = ['control', 'parameter', 'customer_responsibility',
+                  'solution', 'implementation_status', 'control_origination', 'teams']
+
+class EditImplementationForm(ModelForm):
+
+    class Meta:
+        model = Implementation
+        fields = ['parameter', 'customer_responsibility',
+                  'solution', 'implementation_status', 'control_origination', 'teams']
