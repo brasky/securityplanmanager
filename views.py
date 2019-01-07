@@ -94,15 +94,19 @@ def edit_implementations(request, control_pk):
     # implementations = Implementation.objects.filter(control=control)
     # data = {'control': control, 'parameter': 'test'}
 
-    ImplementationFormSet = modelformset_factory(Implementation, fields = ['parameter', 'customer_responsibility',
+    ImplementationFormSet = modelformset_factory(Implementation, fields = ['control', 'parameter', 'customer_responsibility',
                   'solution', 'implementation_status', 'control_origination', 'teams'], can_delete=True)
     formset = ImplementationFormSet(queryset=Implementation.objects.filter(control=control), initial=[{'control': control}])
     if request.method == "POST":
-
+        
         form = ImplementationFormSet(request.POST)
         
         if form.is_valid():
-            form.save()
+            new_instances = form.save(commit=False)
+            for instance in new_instances:
+                instance.control = control
+                instance.save()
+            
             messages.success(request, 'Implementation(s) edited successfully')
             return redirect('/controls/implementations/' + str(control_pk))
 

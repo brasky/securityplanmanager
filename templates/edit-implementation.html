@@ -18,8 +18,9 @@
 {% endif %}
 <a href='/controls/implementations/{{ pk }}'>View All Implementations</a>
 
-{% comment %} {% for form in forms %} {% endcomment %}
+
 <form action="" method="post">
+{{ formset.management_form }}
     {% csrf_token %}
     {% for form in formset%}
     {{ form.as_p }}
@@ -29,8 +30,6 @@
     <input type="submit" value="Submit">
 </form>
 
-{% comment %} <br> <br><br><br> <br><br><br> <br><br><br> <br><br><br> <br><br> {% endcomment %}
-{% comment %} {% endfor %} {% endcomment %}
 </body>
 
 
