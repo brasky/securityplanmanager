@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<head>
+<title>Certifications</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Certifications</h1>
+
+{% for certification in certifications %}
+<p>
+{{ certification.name }} - Percent of Controls Implemented: {{ percent_implemented | floatformat:2}}%
+</p>
+<p>
+Stats:
+</p>
+<p>
+Team1 - {{team1_percent_implemented | floatformat:2}}% Implemented
+</p>
+<p>
+Team2 - {{team2_percent_implemented | floatformat:2}}% Implemented
+</p>
+<br> <br> <br> 
+{% endfor %}
+
+</body>
+
+
+{% endblock content %}

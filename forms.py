@@ -16,9 +16,7 @@ class AddImplementationForm(ModelForm):
                   'solution', 'implementation_status', 'control_origination', 'teams']
 
 class EditImplementationsFormSet(BaseModelFormSet):
-    def __init__(self, *args, control, **kwargs):
-        
+    def __init__(self, *args, control, **kwargs):       
         super(EditImplementationsFormSet, self).__init__(*args, **kwargs)
         self.queryset = Implementation.objects.filter(control=control)
         self.control = control
-
