@@ -1,0 +1,3 @@
+__pycache__
+migrations
+management/commands/control_guidance_list.csv

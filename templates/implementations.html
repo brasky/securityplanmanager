@@ -6,35 +6,41 @@
 </head>
 
 <body>
-<h1 class="page-header text-center">Implementations</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1 class="page-header text-center">Implementations - {{ control.number }}</h1>
 <body>
-<table class="table table-striped table-dark">
-  <thead>
-    <tr>
-      <th scope="col">Control</th>
-      <th scope="col">Completion Status</th>
-      <th scope="col">Last Updated</th>
-     </tr>
-  </thead>
-  <tbody>
-    <tr>
-	
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-     </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Larry</td>
- 	  <td>the Bird</td>
-    </tr>
-  </tbody>
-</table>
+<a href="/controls/implementations/{{ pk }}/edit">Edit Implementations</a>
+
+<br>
+<br>
+
+{% for implementation in implementations %}
+Teams:
+{% for team in implementation.teams.all %}
+{{team.name}}
+
+{% endfor %}
+<br>
+{{implementation.parameter}}
+<br>
+{{ implementation.get_implementation_status_display}}
+<br>
+{{ implementation.get_control_origination_display }}
+<br>
+{{ implementation.solution }}
+<br>
+{{ implementation.customer_responsibility}}
+<br><br><br>
+<br>
+{% endfor %}
+
+
 
 </body>
 {%endblock content%}
