@@ -8,9 +8,9 @@ import re
 from .forms import *
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.forms import modelformset_factory
 
-
-# @lru_cache(maxsize=128)
+@lru_cache(maxsize=128)
 def get_all_controls():
     all_controls = list(Control.objects.all())
     control_name_plus_text = []
@@ -71,7 +71,7 @@ def search(request):
 def implementations(request, control_pk):
     control = Control.objects.get(pk=control_pk)
     all_implementations = Implementation.objects.all().filter(control=control)
-    print(all_implementations)
+    
     return render(request, 'implementations.html',
                   {'control': control, 'implementations': all_implementations, 'pk': control_pk})
 
@@ -91,13 +91,28 @@ def add_implementation(request, control_pk):
 
 def edit_implementations(request, control_pk):
     control = Control.objects.get(pk=control_pk)
-    data = {'control': control}
-    form = EditImplementationForm(initial=data)
+    # implementations = Implementation.objects.filter(control=control)
+    # data = {'control': control, 'parameter': 'test'}
+
+    ImplementationFormSet = modelformset_factory(Implementation, fields = ['parameter', 'customer_responsibility',
+                  'solution', 'implementation_status', 'control_origination', 'teams'], can_delete=True)
+    formset = ImplementationFormSet(queryset=Implementation.objects.filter(control=control), initial=[{'control': control}])
     if request.method == "POST":
-        form = EditImplementationForm(request.POST)
+
+        form = ImplementationFormSet(request.POST)
+        
         if form.is_valid():
             form.save()
             messages.success(request, 'Implementation(s) edited successfully')
             return redirect('/controls/implementations/' + str(control_pk))
 
-    return render(request, 'edit-implementation.html', {'form': form, 'pk': control_pk})
+    # for implementation in implementations:
+    #     print(implementation)
+    #     form = EditImplementationForm(instance=implementation)
+    #     forms.append(form)
+    
+
+
+    # form = EditImplementationsFormSet(queryset=Implementation.objects.filter(control=control))
+
+    return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})

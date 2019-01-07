@@ -6,10 +6,16 @@
 </head>
 
 <body>
-
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 <h1 class="page-header text-center">Implementations - {{ control.number }}</h1>
 <body>
-<a href="/controls/implementations/{{ pk }}/add">Add Implementation</a>
+<a href="/controls/implementations/{{ pk }}/edit">Edit Implementations</a>
 
 <br>
 <br>

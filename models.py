@@ -62,5 +62,4 @@ class Implementation(models.Model):
         team_object_list = list(self.teams.all())
         team_list = [team.name for team in team_object_list]
         name = self.control.number + " - " + ' '.join(team_list)
-        return name 
-
+        return name

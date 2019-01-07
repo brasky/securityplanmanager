@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import ModelForm
-
+from django.forms import modelformset_factory
+from django.forms import BaseModelFormSet
 from .models import Control, Implementation
 
 
@@ -14,9 +15,10 @@ class AddImplementationForm(ModelForm):
         fields = ['control', 'parameter', 'customer_responsibility',
                   'solution', 'implementation_status', 'control_origination', 'teams']
 
-class EditImplementationForm(ModelForm):
+class EditImplementationsFormSet(BaseModelFormSet):
+    def __init__(self, *args, control, **kwargs):
+        
+        super(EditImplementationsFormSet, self).__init__(*args, **kwargs)
+        self.queryset = Implementation.objects.filter(control=control)
+        self.control = control
 
-    class Meta:
-        model = Implementation
-        fields = ['parameter', 'customer_responsibility',
-                  'solution', 'implementation_status', 'control_origination', 'teams']
