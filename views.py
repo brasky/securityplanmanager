@@ -1,6 +1,6 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse
-from .models import Control, Implementation
+from .models import Control, Implementation, Certification, Team
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from functools import lru_cache
@@ -9,6 +9,7 @@ from .forms import *
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.forms import modelformset_factory
+from django.db.models import Count
 
 @lru_cache(maxsize=128)
 def get_all_controls():
@@ -95,28 +96,82 @@ def edit_implementations(request, control_pk):
     # data = {'control': control, 'parameter': 'test'}
 
     ImplementationFormSet = modelformset_factory(Implementation, fields = ['control', 'parameter', 'customer_responsibility',
-                  'solution', 'implementation_status', 'control_origination', 'teams'], can_delete=True)
+                  'solution', 'implementation_status', 'control_origination', 'teams'], can_delete=True, extra=0)
     formset = ImplementationFormSet(queryset=Implementation.objects.filter(control=control), initial=[{'control': control}])
     if request.method == "POST":
         
         form = ImplementationFormSet(request.POST)
-        
+        print(form.errors)
         if form.is_valid():
-            new_instances = form.save(commit=False)
-            for instance in new_instances:
-                instance.control = control
-                instance.save()
-            
+            form.save()
             messages.success(request, 'Implementation(s) edited successfully')
             return redirect('/controls/implementations/' + str(control_pk))
-
-    # for implementation in implementations:
-    #     print(implementation)
-    #     form = EditImplementationForm(instance=implementation)
-    #     forms.append(form)
-    
-
-
-    # form = EditImplementationsFormSet(queryset=Implementation.objects.filter(control=control))
-
     return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})
+
+def certifications(request):
+    # all_certifications = Certification.objects.all()
+    all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
+    high_total_controls = all_certifications[0].num_controls
+    high_implemented_controls = len(all_certifications[0].implementations.filter(implementation_status='IM'))
+    high_partial_contorls = len(all_certifications[0].implementations.filter(implementation_status='PI'))
+    percent_partial = (high_partial_contorls/high_total_controls)*100
+    percent_implemented = (high_implemented_controls/high_total_controls)*100
+
+    data = {'certifications': all_certifications,
+            'percent_implemented': percent_implemented,
+            'percent_partial': percent_partial,}
+    for team in Team.objects.all():
+        print(team.name + '_percent_implemented')
+        data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
+        data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
+
+
+    return render(request, 'certifications.html', data)
+
+def link_implementations_to_certifications(cert_name):
+    cert = Certification.objects.get(name=cert_name)
+    for control in Control.objects.all():
+        cert.controls.add(control)
+        implementations_to_add = Implementation.objects.filter(control=control)
+        cert.implementations.add(*list(implementations_to_add))
+
+def add_certification(request):
+    data = {}
+    form = AddCertificationForm()
+    data['form'] = form
+    if request.method == "POST":
+        form = AddCertificationForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Certification added successfully')
+            return redirect('/controls/certifications/')
+    return render(request, 'add-certification.html', data)
+
+
+def edit_certifications(request):
+    data = {}
+    certFormSet = modelformset_factory(Certification, fields=['name', 'controls'], can_delete=True, extra=0)
+    data['formset'] = certFormSet
+    if request.method == "POST":
+        form = certFormSet(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Certification(s) edited successfully')
+            return redirect('/controls/certifications/')
+    return render(request, 'edit-certifications.html', data)
+
+def certifications_test(request):
+    
+    # cert = Certification.objects.get(name="FedRAMP High")
+    # for control in Control.objects.all():
+    #     cert.controls.add(control)
+    #     implementations_to_add = Implementation.objects.filter(control=control)
+    #     cert.implementations.add(*list(implementations_to_add))
+    return redirect('/controls/')
+
+    # cert.controls.set([controls])
+    # implementations_to_add = Implementation.objects.filter(control__in=[controls])
+    # cert.implementations.set(*[implementations_to_add])
+    # return redirect('/controls/')

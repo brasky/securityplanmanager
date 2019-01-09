@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<head>
+<title>Certifications</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Certifications</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<a href="/controls/certifications/add">Add Certification</a> - <a href="/controls/certifications/edit">Edit Certifications</a>
+<br>
+<br>
+{% for certification in certifications %}
+<p>
+{{ certification.name }}
+<br>
+Percent of Controls Implemented: {{ percent_implemented | floatformat:2}}%
+    <br>
+Percent of Controls Partially Implemented: {{ percent_partial | floatformat:2}}%
+</p>
+<p>
+Stats:
+</p>
+<p>
+Team1 - {{team1_percent_implemented | floatformat:2}}% Implemented, {{team1_percent_partial | floatformat:2}}% Partially Implemented
+</p>
+<p>
+Team2 - {{team2_percent_implemented | floatformat:2}}% Implemented, {{team2_percent_partial | floatformat:2}}% Partially Implemented
+</p>
+<br> <br> <br> 
+{% endfor %}
+
+</body>
+
+
+{% endblock content %}

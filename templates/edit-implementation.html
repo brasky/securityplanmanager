@@ -8,7 +8,7 @@
 <body>
 
 <h1 class="page-header text-center">Edit Implementations</h1>
-<body>
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -18,11 +18,12 @@
 {% endif %}
 <a href='/controls/implementations/{{ pk }}'>View All Implementations</a>
 
-
 <form action="" method="post">
-{{ formset.management_form }}
+
     {% csrf_token %}
+    {{ formset.management_form }}
     {% for form in formset%}
+    
     {{ form.as_p }}
     <br> <br> 
     {% endfor %}

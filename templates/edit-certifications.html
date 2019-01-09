@@ -1,13 +1,11 @@
-{% extends "base.html" %}
-
+{% extends 'base.html' %}
 {% block content %}
 <head>
-<title>Add Implementations</title>
+<title>Certifications</title>
 </head>
 
 <body>
-
-<h1 class="page-header text-center">Add Implementation</h1>
+<h1 class="page-header text-center">Edit Certifications</h1>
 
 {% if messages %}
 <ul class="messages">
@@ -16,10 +14,17 @@
     {% endfor %}
 </ul>
 {% endif %}
-<a href='/controls/implementations/{{ pk }}'>View All Implementations</a>
+<a href='/controls/certifications/'>View All Certifications</a>
+
 <form action="" method="post">
+
     {% csrf_token %}
+    {{ formset.management_form }}
+    {% for form in formset%}
+    
     {{ form.as_p }}
+    <br> <br> 
+    {% endfor %}
 
     <input type="submit" value="Submit">
 </form>

@@ -50,7 +50,7 @@ class Implementation(models.Model):
     def team_default():
         return Team.objects.all()	
     
-    teams = models.ManyToManyField(Team,related_name='teams', default=team_default)	
+    teams = models.ManyToManyField(Team,related_name='implementations', default=team_default)	
 
     def status_verbose(self):
         return dict(Implementation.IMPLEMENTATION_STATUS_CHOICES)[self.implementation_status]
@@ -63,3 +63,13 @@ class Implementation(models.Model):
         team_list = [team.name for team in team_object_list]
         name = self.control.number + " - " + ' '.join(team_list)
         return name
+
+
+class Certification(models.Model):
+    
+    name = models.CharField(max_length = 30, unique = True)
+    controls = models.ManyToManyField(Control, related_name='certifications')
+    implementations = models.ManyToManyField(Implementation, related_name='certifications', blank=True)
+
+    def __str__(self):
+        return self.name  
