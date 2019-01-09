@@ -19,7 +19,7 @@
 <br>
 {% for certification in certifications %}
 <p>
-{{ certification.name }}
+<a href="/controls/certifications/{{certification.name}}/">{{ certification.name }}</a>
 <br>
 Percent of Controls Implemented: {{ percent_implemented | floatformat:2}}%
     <br>
