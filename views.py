@@ -161,6 +161,15 @@ def edit_certifications(request):
             return redirect('/controls/certifications/')
     return render(request, 'edit-certifications.html', data)
 
+def view_certification(request, certification_name):
+    cert = Certification.objects.get(name=certification_name)
+    implementations = cert.implementations.all()
+    data = {'certification': cert,
+            'implementations': implementations}
+
+    return render(request, 'view-certification.html', data)
+    pass
+
 def teams(request):
     data = {}
     data['teams'] = Team.objects.all()

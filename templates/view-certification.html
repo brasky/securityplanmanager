@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<head>
+<title>{{certification.name}} - Implementations</title>
+</head>
+
+<body>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1 class="page-header text-center">{{certification.name}} Implementations</h1>
+
+
+{% for implementation in implementations %}
+<a href="/controls/implementations/{{implementation.control.pk}}/"> {{ implementation.teams.all|join:', ' }} - {{ implementation.control.number}}</a>
+<br> <br> 
+{% endfor %}
+
+
+</body>
+{%endblock content%}
+
+
+
+

@@ -32,3 +32,4 @@ class AddTeamForm(ModelForm):
     class Meta:
         model = Team
         fields = ['name']
+        
