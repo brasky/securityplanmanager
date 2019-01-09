@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+<title>Edit Teams</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Edit Teams</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<a href='/controls/teams/'>View All Teams</a>
+
+<form action="" method="post">
+
+    {% csrf_token %}
+    {{ formset.management_form }}
+    {% for form in formset%}
+    
+    {{ form.as_p }}
+    <br> <br> 
+    {% endfor %}
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+
+
+{% endblock content %}
+

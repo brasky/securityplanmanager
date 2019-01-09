@@ -121,7 +121,6 @@ def certifications(request):
             'percent_implemented': percent_implemented,
             'percent_partial': percent_partial,}
     for team in Team.objects.all():
-        print(team.name + '_percent_implemented')
         data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
         data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
 
@@ -161,6 +160,39 @@ def edit_certifications(request):
             messages.success(request, 'Certification(s) edited successfully')
             return redirect('/controls/certifications/')
     return render(request, 'edit-certifications.html', data)
+
+def teams(request):
+    data = {}
+    data['teams'] = Team.objects.all()
+    
+    return render(request, 'teams.html', data)
+    
+def add_team(request):
+    data = {}
+    data['form'] = AddTeamForm()
+    if request.method == "POST":
+        form = AddTeamForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Team added successfully')
+            return redirect('/controls/teams/')
+    return render(request, 'add-team.html', data)
+
+def edit_teams(request):
+    data = {}
+    teamFormSet = modelformset_factory(Team, fields=['name'], can_delete=True, extra=1)
+    data['formset'] = teamFormSet
+    if request.method == "POST":
+        form = teamFormSet(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Team(s) edited succesfully')
+            return redirect('/controls/teams/')
+    return render(request, 'edit-teams.html', data)
+
+
 
 def certifications_test(request):
     

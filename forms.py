@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms import modelformset_factory
 from django.forms import BaseModelFormSet
-from .models import Control, Implementation, Certification
+from .models import Control, Implementation, Certification, Team
 
 
 class AddImplementationForm(ModelForm):
@@ -26,3 +26,9 @@ class AddCertificationForm(ModelForm):
     class Meta:
         model = Certification
         fields = ['name', 'controls']
+
+class AddTeamForm(ModelForm):
+
+    class Meta:
+        model = Team
+        fields = ['name']

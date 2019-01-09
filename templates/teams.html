@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block content %}
+<head>
+<title>Teams</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Teams</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<a href="/controls/teams/add">Add Team</a> - <a href="/controls/teams/edit">Edit Teams</a>
+<br>
+<br>
+{% for team in teams %}
+<p>
+{{ team.name }}
+<br>
+{% endfor %}
+
+</body>
+
+
+{% endblock content %}
