@@ -128,6 +128,39 @@ def certifications(request):
 
     return render(request, 'certifications.html', data)
 
+def link_implementations_to_certifications(cert_name):
+    cert = Certification.objects.get(name=cert_name)
+    for control in Control.objects.all():
+        cert.controls.add(control)
+        implementations_to_add = Implementation.objects.filter(control=control)
+        cert.implementations.add(*list(implementations_to_add))
+
+def add_certification(request):
+    data = {}
+    form = AddCertificationForm()
+    data['form'] = form
+    if request.method == "POST":
+        form = AddCertificationForm(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Certification added successfully')
+            return redirect('/controls/certifications/')
+    return render(request, 'add-certification.html', data)
+
+
+def edit_certifications(request):
+    data = {}
+    certFormSet = modelformset_factory(Certification, fields=['name', 'controls'], can_delete=True, extra=0)
+    data['formset'] = certFormSet
+    if request.method == "POST":
+        form = certFormSet(request.POST)
+        print(form.errors)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Certification(s) edited successfully')
+            return redirect('/controls/certifications/')
+    return render(request, 'edit-certifications.html', data)
 
 def certifications_test(request):
     

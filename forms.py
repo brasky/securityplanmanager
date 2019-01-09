@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms import modelformset_factory
 from django.forms import BaseModelFormSet
-from .models import Control, Implementation
+from .models import Control, Implementation, Certification
 
 
 class AddImplementationForm(ModelForm):
@@ -20,3 +20,9 @@ class EditImplementationsFormSet(BaseModelFormSet):
         super(EditImplementationsFormSet, self).__init__(*args, **kwargs)
         self.queryset = Implementation.objects.filter(control=control)
         self.control = control
+
+class AddCertificationForm(ModelForm):
+
+    class Meta:
+        model = Certification
+        fields = ['name', 'controls']
