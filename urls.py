@@ -10,7 +10,7 @@ urlpatterns = [
     path('teams/', views.teams, name='teams'),
     path('implementations/<int:control_pk>/add/', 
          views.add_implementation, name='add_implementation'),
-    path('implementations/<int:control_pk>/edit', views.edit_implementations, name='edit_implementation'),
+    path('implementations/<int:control_pk>/edit/', views.edit_implementations, name='edit_implementation'),
     path('implementations/<int:control_pk>/', views.implementations, name='implementations'),
     path('certifications/', views.certifications, name='certifications'),
     path('certifications/add', views.add_certification, name='add_certification'),

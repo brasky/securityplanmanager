@@ -110,6 +110,7 @@ def edit_implementations(request, control_pk):
             return redirect('/controls/implementations/' + str(control_pk))
     return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})
 
+
 def certifications(request):
     # all_certifications = Certification.objects.all()
     all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
