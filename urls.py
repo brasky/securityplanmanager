@@ -6,6 +6,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('teams/add', views.add_team, name='add_team'),
     path('teams/edit', views.edit_teams, name='edit_teams'),
+    path('teams/<str:team_name>/', views.view_team, name='view_team'),
     path('teams/', views.teams, name='teams'),
     path('implementations/<int:control_pk>/add/', 
          views.add_implementation, name='add_implementation'),

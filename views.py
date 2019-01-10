@@ -163,9 +163,9 @@ def edit_certifications(request):
 
 def view_certification(request, certification_name):
     cert = Certification.objects.get(name=certification_name)
-    implementations = cert.implementations.all()
+    all_implementations = cert.implementations.all()
     data = {'certification': cert,
-            'implementations': implementations}
+            'implementations': all_implementations}
 
     return render(request, 'view-certification.html', data)
     pass
@@ -201,6 +201,14 @@ def edit_teams(request):
             return redirect('/controls/teams/')
     return render(request, 'edit-teams.html', data)
 
+def view_team(request, team_name):
+    data = {}
+    team = Team.objects.get(name=team_name)
+    all_implementations = Implementation.objects.filter(teams__in=[team])
+    data['team'] = team
+    data['all_implementations'] = all_implementations
+
+    return render(request, 'view-team.html', data)
 
 
 def certifications_test(request):
