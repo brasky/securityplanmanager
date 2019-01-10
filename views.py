@@ -50,11 +50,12 @@ def search(request):
     results = []
     counter = 0
     for result in search_results:
-        #		print(result[0].split(':')[0])
+
         temp_result = []
         control = result[0].split(':')[0]
-#		print(control_dict[control])
-        temp_result.append(counter)
+ 
+
+        temp_result.append(Control.objects.get(number=control).pk)
         counter += 1
         temp_result.append(control)
         if len(search_text) > 2:
@@ -65,6 +66,7 @@ def search(request):
         temp_result.append(control_text)
         temp_result.append(control_guidance[control])
         results.append(temp_result)
+
 
     return render_to_response('ajax_search.html', {'controls': results})
 

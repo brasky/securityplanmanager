@@ -17,7 +17,7 @@ input.form-control {
 
 }
 
-a.list-group-item:first-child {
+a.list-group-item.border:first-child {
 	
 	border-radius: 0px 0px 4px 4px;
 
@@ -31,3 +31,8 @@ span.hasGuidance {
 span.query {
 	background-color: yellow;
 }
+
+ul > li.list-unstyled:hover {
+	background-color:#f5f5f5;
+	cursor: pointer;
+} 
