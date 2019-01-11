@@ -3,6 +3,7 @@ from control_search.models import Control, Implementation
 import csv
 import os
 
+
 class Command(BaseCommand):
 	help = 'Fill the database with controls'
 	def handle(self, *Args, **options):
@@ -15,6 +16,12 @@ class Command(BaseCommand):
 			if not Control.objects.filter(number=num).exists():
 				Control(number=num, control_text=text).save()
 				controls_created+=1
+		control_list_file = csv.reader(open('control_search\management\commands\control_guidance_list.csv', 'r'))
+		control_list = dict(control_list_file)
+		for num, text in control_list.items():
+			control_object = Control.objects.filter(number=num).get()
+			control_object.supplemental_guidance = text
+			control_object.save()
 		print('Controls created: ' + str(controls_created))
 		print('Total controls: ' + str(len(Control.objects.all())))
 	
