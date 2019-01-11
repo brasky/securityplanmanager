@@ -117,7 +117,7 @@ def edit_implementations(request, control_pk):
 def certifications(request):
     # all_certifications = Certification.objects.all()
     data = {}
-    if Certification.objects.all() > 1:
+    if len(Certification.objects.all()) > 1:
         all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
         high_total_controls = all_certifications[0].num_controls
         high_implemented_controls = len(all_certifications[0].implementations.filter(implementation_status='IM'))
