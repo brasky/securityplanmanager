@@ -91,7 +91,7 @@ def add_implementation(request, control_pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Implementation added successfully')
-            return redirect('/controls/implementations/' + str(control_pk))
+            return redirect('/implementations/' + str(control_pk))
 
     return render(request, 'add-implementation.html', {'form': form, 'pk': control_pk})
 
@@ -110,7 +110,7 @@ def edit_implementations(request, control_pk):
         if form.is_valid():
             form.save()
             messages.success(request, 'Implementation(s) edited successfully')
-            return redirect('/controls/implementations/' + str(control_pk))
+            return redirect('/implementations/' + str(control_pk))
     return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})
 
 
@@ -152,7 +152,7 @@ def add_certification(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Certification added successfully')
-            return redirect('/controls/certifications/')
+            return redirect('/certifications/')
     return render(request, 'add-certification.html', data)
 
 
@@ -166,7 +166,7 @@ def edit_certifications(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Certification(s) edited successfully')
-            return redirect('/controls/certifications/')
+            return redirect('/certifications/')
     return render(request, 'edit-certifications.html', data)
 
 def view_certification(request, certification_name):
@@ -193,7 +193,7 @@ def add_team(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Team added successfully')
-            return redirect('/controls/teams/')
+            return redirect('/teams/')
     return render(request, 'add-team.html', data)
 
 def edit_teams(request):
@@ -206,7 +206,7 @@ def edit_teams(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Team(s) edited succesfully')
-            return redirect('/controls/teams/')
+            return redirect('/teams/')
     return render(request, 'edit-teams.html', data)
 
 def view_team(request, team_name):
@@ -226,7 +226,7 @@ def certifications_test(request):
     #     cert.controls.add(control)
     #     implementations_to_add = Implementation.objects.filter(control=control)
     #     cert.implementations.add(*list(implementations_to_add))
-    return redirect('/controls/')
+    return redirect('/')
 
     # cert.controls.set([controls])
     # implementations_to_add = Implementation.objects.filter(control__in=[controls])
