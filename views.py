@@ -90,6 +90,7 @@ def add_implementation(request, control_pk):
         form = AddImplementationForm(request.POST)
         if form.is_valid():
             form.save()
+            update_certification_implementations()
             messages.success(request, 'Implementation added successfully')
             return redirect('/implementations/' + str(control_pk))
 
@@ -109,6 +110,7 @@ def edit_implementations(request, control_pk):
         print(form.errors)
         if form.is_valid():
             form.save()
+            update_certification_implementations()
             messages.success(request, 'Implementation(s) edited successfully')
             return redirect('/implementations/' + str(control_pk))
     return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})
@@ -131,13 +133,18 @@ def certifications(request):
         for team in Team.objects.all():
             data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
             data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
-
-
     return render(request, 'certifications.html', data)
+
+def update_certification_implementations():
+    for cert in Certification.objects.all():
+        for control in cert.controls.all():
+            cert.controls.add(control)
+            implementations_to_add = Implementation.objects.filter(control=control)
+            cert.implementations.add(*list(implementations_to_add))
 
 def link_implementations_to_certifications(cert_name):
     cert = Certification.objects.get(name=cert_name)
-    for control in Control.objects.all():
+    for control in cert.controls.all():
         cert.controls.add(control)
         implementations_to_add = Implementation.objects.filter(control=control)
         cert.implementations.add(*list(implementations_to_add))
@@ -151,6 +158,7 @@ def add_certification(request):
         print(form.errors)
         if form.is_valid():
             form.save()
+            link_implementations_to_certifications(form.cleaned_data['name'])
             messages.success(request, 'Certification added successfully')
             return redirect('/certifications/')
     return render(request, 'add-certification.html', data)
@@ -165,6 +173,9 @@ def edit_certifications(request):
         print(form.errors)
         if form.is_valid():
             form.save()
+            for item in form.cleaned_data:
+                link_implementations_to_certifications(item['name'])
+
             messages.success(request, 'Certification(s) edited successfully')
             return redirect('/certifications/')
     return render(request, 'edit-certifications.html', data)
@@ -180,8 +191,7 @@ def view_certification(request, certification_name):
 
 def teams(request):
     data = {}
-    data['teams'] = Team.objects.all()
-    
+    data['teams'] = Team.objects.all()  
     return render(request, 'teams.html', data)
     
 def add_team(request):

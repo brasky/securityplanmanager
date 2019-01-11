@@ -7,6 +7,9 @@
 
 <body>
 <h1 class="page-header text-center">Certifications</h1>
+
+<a href="/certifications/add">Add Certification</a> - <a href="/certifications/edit">Edit Certifications</a>
+<br>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -14,8 +17,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-<a href="/certifications/add">Add Certification</a> - <a href="/controls/certifications/edit">Edit Certifications</a>
-<br>
 <br>
 {% for certification in certifications %}
 <p>
