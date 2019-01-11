@@ -17,7 +17,7 @@
 
 
 {% for implementation in implementations %}
-<a href="/controls/implementations/{{implementation.control.pk}}/">{{ implementation.control.number}} - {{ implementation.teams.all|join:', ' }}</a>
+<a href="/implementations/{{implementation.control.pk}}/">{{ implementation.control.number}} - {{ implementation.teams.all|join:', ' }}</a>
 <br> <br> 
 {% endfor %}
 

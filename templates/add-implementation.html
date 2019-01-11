@@ -16,7 +16,7 @@
     {% endfor %}
 </ul>
 {% endif %}
-<a href='/controls/implementations/{{ pk }}'>View All Implementations</a>
+<a href='/implementations/{{ pk }}'>View All Implementations</a>
 <form action="" method="post">
     {% csrf_token %}
     {{ form.as_p }}

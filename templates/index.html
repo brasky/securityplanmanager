@@ -2,11 +2,11 @@
 {% load humanize %}
 {% block content %}
 <head>
-<title>Teams</title>
+<title>SSP Dev</title>
 </head>
 
 <body>
-<h1 class="page-header text-center">Teams</h1>
+<h1 class="page-header text-center">SSP Dev</h1>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}
@@ -14,14 +14,6 @@
     {% endfor %}
 </ul>
 {% endif %}
-<a href="/teams/add">Add Team</a> - <a href="/teams/edit">Edit Teams</a>
-<br>
-<br>
-{% for team in teams %}
-<p>
-{{ team.name }}
-<br>
-{% endfor %}
 
 </body>
 

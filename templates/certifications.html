@@ -14,12 +14,12 @@
     {% endfor %}
 </ul>
 {% endif %}
-<a href="/controls/certifications/add">Add Certification</a> - <a href="/controls/certifications/edit">Edit Certifications</a>
+<a href="/certifications/add">Add Certification</a> - <a href="/controls/certifications/edit">Edit Certifications</a>
 <br>
 <br>
 {% for certification in certifications %}
 <p>
-<a href="/controls/certifications/{{certification.name}}/">{{ certification.name }}</a>
+<a href="/certifications/{{certification.name}}/">{{ certification.name }}</a>
 <br>
 Percent of Controls Implemented: {{ percent_implemented | floatformat:2}}%
     <br>

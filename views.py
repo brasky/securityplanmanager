@@ -31,8 +31,11 @@ def highlight_matches(query, text):
         return html.format(match.group(0))
     return re.sub(query, span_matches, text, flags=re.I)
 
-
 def index(request):
+
+    return render(request, 'index.html')
+
+def control_search(request):
     args = {}
     return render(request, 'search_box.html', args)
 
