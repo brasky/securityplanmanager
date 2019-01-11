@@ -116,19 +116,21 @@ def edit_implementations(request, control_pk):
 
 def certifications(request):
     # all_certifications = Certification.objects.all()
-    all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
-    high_total_controls = all_certifications[0].num_controls
-    high_implemented_controls = len(all_certifications[0].implementations.filter(implementation_status='IM'))
-    high_partial_contorls = len(all_certifications[0].implementations.filter(implementation_status='PI'))
-    percent_partial = (high_partial_contorls/high_total_controls)*100
-    percent_implemented = (high_implemented_controls/high_total_controls)*100
+    data = {}
+    if Certification.objects.all() > 1:
+        all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
+        high_total_controls = all_certifications[0].num_controls
+        high_implemented_controls = len(all_certifications[0].implementations.filter(implementation_status='IM'))
+        high_partial_contorls = len(all_certifications[0].implementations.filter(implementation_status='PI'))
+        percent_partial = (high_partial_contorls/high_total_controls)*100
+        percent_implemented = (high_implemented_controls/high_total_controls)*100
 
-    data = {'certifications': all_certifications,
-            'percent_implemented': percent_implemented,
-            'percent_partial': percent_partial,}
-    for team in Team.objects.all():
-        data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
-        data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
+        data = {'certifications': all_certifications,
+                'percent_implemented': percent_implemented,
+                'percent_partial': percent_partial,}
+        for team in Team.objects.all():
+            data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
+            data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
 
 
     return render(request, 'certifications.html', data)
