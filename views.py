@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.forms import modelformset_factory
 from django.db.models import Count
+from .ssp_parser import parse_ssp
 
 @lru_cache(maxsize=128)
 def get_all_controls():
@@ -242,3 +243,18 @@ def certifications_test(request):
     # implementations_to_add = Implementation.objects.filter(control__in=[controls])
     # cert.implementations.set(*[implementations_to_add])
     # return redirect('/controls/')
+
+
+def import_ssp(request):
+    if request.method == "POST":
+        print(request.FILES)
+        form = SSPUploadForm(request.POST, request.FILES)
+        print(form.errors)
+        if form.is_valid():
+            parse_ssp(request.FILES['file'])
+            messages.success(request, 'SSP Upload Complete')
+            # return redirect('/')
+    form = SSPUploadForm()
+    data = {}
+    data['form'] = form
+    return render(request, 'import.html', data)

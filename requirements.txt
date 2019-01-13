@@ -1,2 +1,4 @@
 fuzzywuzzy
 xmltodict
+python-docx
+openpyxl

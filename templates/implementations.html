@@ -40,8 +40,13 @@ Teams:
 <br>
 {% endfor %}
 
+
+<div class="control-header">Control Text:</div>
+<div class="control-text">{{control.control_text}} </div>
+<br>
+<br>
 {% if control.supplemental_guidance%}
-<div class="control-header"> 
+
 <div class="guidance-header">Supplemental Guidance:</div>
 <p class="list-group-item list-group-item-warning">{{control.supplemental_guidance}}</p>
 {% endif %}
