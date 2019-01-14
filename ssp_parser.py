@@ -106,11 +106,11 @@ def create_implementation(new_implementation):
         control_origination=new_implementation['control_origination'],
         )
     new_implementations.append(new_implementation_object)
-    for implementation in new_implementations:
-        implementation.save()
-        implementation.teams.set(new_implementation['teams'])
-    # new_implementation_object.save()
-    # new_implementation_object.teams.set(new_implementation['teams'])
+    # for implementation in new_implementations:
+    #     implementation.save()
+    #     implementation.teams.set(new_implementation['teams'])
+    new_implementation_object.save()
+    new_implementation_object.teams.set(new_implementation['teams'])
 
 def parse_solution_table(table, control_object, control_parts):
     control_number = control_object.number
