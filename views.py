@@ -11,6 +11,8 @@ from django.shortcuts import redirect
 from django.forms import modelformset_factory
 from django.db.models import Count
 from .ssp_parser import parse_ssp
+from timeit import default_timer as timer
+
 
 @lru_cache(maxsize=128)
 def get_all_controls():
@@ -251,7 +253,16 @@ def import_ssp(request):
         form = SSPUploadForm(request.POST, request.FILES)
         print(form.errors)
         if form.is_valid():
+            start = timer()
             parse_ssp(request.FILES['file'])
+            end = timer()
+            time = end - start
+            print('SSP Parser took: ' + str(time))
+            start = timer()
+            link_implementations_to_certifications(form.cleaned_data['certification'])
+            end = timer()
+            time = end - start
+            print('Linking implementations took: ' + str(time))
             messages.success(request, 'SSP Upload Complete')
             # return redirect('/')
     form = SSPUploadForm()

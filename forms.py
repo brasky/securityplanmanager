@@ -34,6 +34,6 @@ class AddTeamForm(ModelForm):
         fields = ['name']
 
 class SSPUploadForm(forms.Form):
-    cert = forms.ModelChoiceField(Certification.objects.all())
+    certification = forms.ModelChoiceField(Certification.objects.all())
     file = forms.FileField()
     

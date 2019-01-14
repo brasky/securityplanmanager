@@ -95,9 +95,22 @@ def get_part_text(implementation_details, control_parts):
         elif part_num_comma in part:
             part_text = part.lstrip('1234567890:, \n') 
             return part_text
-
-def create_implementation():
-    pass
+new_implementations = []
+def create_implementation(new_implementation):
+    new_implementation_object = Implementation(
+        control=new_implementation['control_object'],
+        parameter=new_implementation['parameter'],
+        customer_responsibility=new_implementation['customer_resp'],
+        solution=new_implementation['solution'],
+        implementation_status=new_implementation['implementation_status'],
+        control_origination=new_implementation['control_origination'],
+        )
+    new_implementations.append(new_implementation_object)
+    for implementation in new_implementations:
+        implementation.save()
+        implementation.teams.set(new_implementation['teams'])
+    # new_implementation_object.save()
+    # new_implementation_object.teams.set(new_implementation['teams'])
 
 def parse_solution_table(table, control_object, control_parts):
     control_number = control_object.number
@@ -225,8 +238,23 @@ def parse_ssp(file):
                     implementation_details, customer_responsibility = parse_solution_table(table, control_object, control_parts)
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
-                        print(control_object.number)
-                        print(implementation_details)
+                        # print(control_object.number)
+                        # print(implementation_details)
+                    try:
+                        parameter = parameters[control]
+                    except KeyError:
+                        parameter = ''
+                        pass
+                    new_implementation = {
+                        'control_object': control_object,
+                        'solution': implementation_details,
+                        'customer_resp': customer_responsibility,
+                        'teams': Team.objects.all(),
+                        'control_origination': control_origination,
+                        'implementation_status': implementation_status,
+                        'parameter': parameter
+                    }
+                    create_implementation(new_implementation)
 
             elif len(control_parent) == 4:
                 control = control_parent.replace('-0', '-') + "("
@@ -239,7 +267,23 @@ def parse_ssp(file):
                     implementation_details, customer_responsibility = parse_solution_table(table, control_object, control_parts)
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
-                
+                    try:
+                        parameter = parameters[control]
+                    except KeyError:
+                        parameter = ''
+                        pass
+                    new_implementation = {
+                        'control_object': control_object,
+                        'solution': implementation_details,
+                        'customer_resp': customer_responsibility,
+                        'teams': Team.objects.all(),
+                        'control_origination': control_origination,
+                        'implementation_status': implementation_status,
+                        'parameter': parameter
+                    }
+                    create_implementation(new_implementation)
+
+
             elif ' ' in control_parent and "Req." not in control_parent:
                 control = control_parent.replace('-0', '-')
                 matching_controls = Control.objects.filter(number__contains=control)
@@ -248,7 +292,22 @@ def parse_ssp(file):
                     implementation_details, customer_responsibility = parse_solution_table(table, control_object, control_parts)           
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
-
+                    try:
+                        parameter = parameters[control]
+                    except KeyError:
+                        parameter = ''
+                        pass
+                    new_implementation = {
+                        'control_object': control_object,
+                        'solution': implementation_details,
+                        'customer_resp': customer_responsibility,
+                        'teams': Team.objects.all(),
+                        'control_origination': control_origination,
+                        'implementation_status': implementation_status,
+                        'parameter': parameter
+                    }
+                    create_implementation(new_implementation)
+                    
             elif "Req." not in control_parent:
                 control_base = control_parent[:5]
 
@@ -260,19 +319,38 @@ def parse_ssp(file):
                 matching_controls = Control.objects.filter(number__contains=control)
                 if not matching_controls:
                     control_base = control_parent[:4]
-                    print(control_base)
+                    # print(control_base)
                     control_enhancement = control_parent[4:]
-                    print(control_enhancement)
+                    # print(control_enhancement)
                     control = control_base + ' ' + control_enhancement
                     control = control.replace('-0', '-')
-                    print(control)
+                    # print(control)
                     matching_controls = Control.objects.filter(number__contains=control)
                 for control_object in matching_controls:
                     control_parts = get_control_parts(control_object.number)
                     implementation_details, customer_responsibility = parse_solution_table(table, control_object, control_parts)           
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
-
+                    try:
+                        parameter = parameters[control]
+                    except KeyError:
+                        parameter = ''
+                        pass
+                    new_implementation = {
+                        'control_object': control_object,
+                        'solution': implementation_details,
+                        'customer_resp': customer_responsibility,
+                        'teams': Team.objects.all(),
+                        'control_origination': control_origination,
+                        'implementation_status': implementation_status,
+                        'parameter': parameter
+                    }
+                    create_implementation(new_implementation)
+    
+    # Implementation.objects.bulk_create(new_implementations)
+    # ThroughModel = Implementation.teams.through
+    # teams = Team.objects.all()
+    # ThroughModel.objects.bulk_create()
 
 # def create_implementation():
     
