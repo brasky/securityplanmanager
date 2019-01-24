@@ -246,6 +246,8 @@ def certifications_test(request):
     # cert.implementations.set(*[implementations_to_add])
     # return redirect('/controls/')
 
+def import_home(request):
+    return render(request, 'import-home.html')
 
 def import_ssp(request):
     if request.method == "POST":
@@ -268,4 +270,4 @@ def import_ssp(request):
     form = SSPUploadForm()
     data = {}
     data['form'] = form
-    return render(request, 'import.html', data)
+    return render(request, 'import-ssp.html', data)

@@ -14,14 +14,9 @@
     {% endfor %}
 </ul>
 {% endif %}
-
-<form action="" method="post" enctype='multipart/form-data'>
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <input type="submit" value="Submit">
-</form>
-
+<ul>
+<li><a href="/import/ssp/">Import SSP Word Document</a></li>
+</ul>
 </body>
 
 

@@ -18,5 +18,7 @@ urlpatterns = [
     path('certifications/edit', views.edit_certifications, name='edit_certifications'),
     path('certification-test/', views.certifications_test, name='certification-test'),
     path('certifications/<str:certification_name>/', views.view_certification, name='view_certification'),
-    path('import/', views.import_ssp, name='import_ssp')
+    path('import/ssp/', views.import_ssp, name='import_ssp'),
+    path('import/', views.import_home, name='import_home'),
+    
 ]

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+<title>Import</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Import SSP Word Document</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<div class="alert alert-warning" role="alert">
+    Only docx SSPs in a standard FedRAMP template are supported. 
+    Please ensure parts are separated by "Part 1:" or "Part 1, 2, 3:" inside of implementation details.
+</div>
+<form action="" method="post" enctype='multipart/form-data'>
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+
+
+{% endblock content %}
