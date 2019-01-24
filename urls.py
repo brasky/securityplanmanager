@@ -20,5 +20,6 @@ urlpatterns = [
     path('certifications/<str:certification_name>/', views.view_certification, name='view_certification'),
     path('import/ssp/', views.import_ssp, name='import_ssp'),
     path('import/', views.import_home, name='import_home'),
-    
+    path('export/<str:doc_name>/<str:baseline>/<str:format>/', views.export_download, name='export_download'),
+    path('export/', views.export_home, name='export_home'),
 ]

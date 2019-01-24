@@ -11,7 +11,9 @@ from django.shortcuts import redirect
 from django.forms import modelformset_factory
 from django.db.models import Count
 from .ssp_parser import parse_ssp
+from .export import generate_docx_ssp
 from timeit import default_timer as timer
+
 
 
 @lru_cache(maxsize=128)
@@ -271,3 +273,15 @@ def import_ssp(request):
     data = {}
     data['form'] = form
     return render(request, 'import-ssp.html', data)
+
+def export_home(request):
+    return render(request, 'export-home.html')
+
+def export_download(request, doc_name, baseline, format):
+    if doc_name == 'ssp' and format == 'docx' and baseline == 'high':
+        return generate_docx_ssp(baseline)
+
+    return redirect('/')
+    pass
+
+

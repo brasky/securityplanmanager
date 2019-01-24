@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+<title>Export</title>
+</head>
+
+<body>
+<h1 class="page-header text-center">Export</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<ul>
+<li><a href="/export/ssp/high/docx">Export SSP Word Document</a></li>
+</ul>
+</body>
+
+
+{% endblock content %}
