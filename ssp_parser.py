@@ -197,7 +197,7 @@ def parse_ssp(file):
                         # print(control_object.number)
                         # print(implementation_details)
                     try:
-                        parameter = parameters[control]
+                        parameter = parameters[control_parent.replace('-0', '-')]
                     except KeyError:
                         parameter = ''
                         pass
@@ -224,7 +224,7 @@ def parse_ssp(file):
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
                     try:
-                        parameter = parameters[control]
+                        parameter = parameters[control_parent.replace('-0', '-')]
                     except KeyError:
                         parameter = ''
                         pass
@@ -249,7 +249,7 @@ def parse_ssp(file):
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
                     try:
-                        parameter = parameters[control]
+                        parameter = parameters[control_parent.replace('-0', '-')]
                     except KeyError:
                         parameter = ''
                         pass
@@ -288,7 +288,7 @@ def parse_ssp(file):
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
                     try:
-                        parameter = parameters[control]
+                        parameter = parameters[control_parent.replace('-0', '-')]
                     except KeyError:
                         parameter = ''
                         pass
