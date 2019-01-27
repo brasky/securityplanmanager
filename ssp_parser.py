@@ -42,14 +42,25 @@ def get_part_text(implementation_details, control_parts):
             return part_text
 new_implementations = []
 def create_implementation(new_implementation):
-    new_implementation_object = Implementation(
-        control=new_implementation['control_object'],
-        parameter=new_implementation['parameter'],
-        customer_responsibility=new_implementation['customer_resp'],
-        solution=new_implementation['solution'],
-        implementation_status=new_implementation['implementation_status'],
-        control_origination=new_implementation['control_origination'],
-        )
+    if new_implementation['customer_resp']:
+        new_implementation_object = Implementation(
+            control=new_implementation['control_object'],
+            parameter=new_implementation['parameter'],
+            customer_responsibility=new_implementation['customer_resp'],
+            solution=new_implementation['solution'],
+            implementation_status=new_implementation['implementation_status'],
+            control_origination=new_implementation['control_origination'],
+            )
+    else:
+        new_implementation_object = Implementation(
+            control=new_implementation['control_object'],
+            parameter=new_implementation['parameter'],
+            customer_responsibility='',
+            solution=new_implementation['solution'],
+            implementation_status=new_implementation['implementation_status'],
+            control_origination=new_implementation['control_origination'],
+            )
+    
     new_implementations.append(new_implementation_object)
     # for implementation in new_implementations:
     #     implementation.save()
