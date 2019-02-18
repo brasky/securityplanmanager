@@ -46,6 +46,7 @@ def create_implementation(new_implementation):
         new_implementation_object = Implementation(
             control=new_implementation['control_object'],
             parameter=new_implementation['parameter'],
+            responsible_role=new_implementation['responsible_role'],
             customer_responsibility=new_implementation['customer_resp'],
             solution=new_implementation['solution'],
             implementation_status=new_implementation['implementation_status'],
@@ -55,6 +56,7 @@ def create_implementation(new_implementation):
         new_implementation_object = Implementation(
             control=new_implementation['control_object'],
             parameter=new_implementation['parameter'],
+            responsible_role=new_implementation['responsible_role'],
             customer_responsibility='',
             solution=new_implementation['solution'],
             implementation_status=new_implementation['implementation_status'],
@@ -208,7 +210,8 @@ def parse_ssp(file):
                         'teams': Team.objects.all(),
                         'control_origination': control_origination,
                         'implementation_status': implementation_status,
-                        'parameter': parameter
+                        'parameter': parameter,
+                        'responsible_role': responsible_role
                     }
                     create_implementation(new_implementation)
 
@@ -235,7 +238,8 @@ def parse_ssp(file):
                         'teams': Team.objects.all(),
                         'control_origination': control_origination,
                         'implementation_status': implementation_status,
-                        'parameter': parameter
+                        'parameter': parameter,
+                        'responsible_role': responsible_role
                     }
                     create_implementation(new_implementation)
 
@@ -260,7 +264,8 @@ def parse_ssp(file):
                         'teams': Team.objects.all(),
                         'control_origination': control_origination,
                         'implementation_status': implementation_status,
-                        'parameter': parameter
+                        'parameter': parameter,
+                        'responsible_role': responsible_role
                     }
                     create_implementation(new_implementation)
                     
@@ -299,31 +304,7 @@ def parse_ssp(file):
                         'teams': Team.objects.all(),
                         'control_origination': control_origination,
                         'implementation_status': implementation_status,
-                        'parameter': parameter
+                        'parameter': parameter,
+                        'responsible_role': responsible_role
                     }
                     create_implementation(new_implementation)
-    
-    # Implementation.objects.bulk_create(new_implementations)
-    # ThroughModel = Implementation.teams.through
-    # teams = Team.objects.all()
-    # ThroughModel.objects.bulk_create()
-
-# def create_implementation():
-    
-
-                    # control_test = 'AC-02(1)'
-                    # # 
-                    # control_test_base = control_test[:5]
-                    # control_test_enhancement = control_test[5:]
-                    # control_test = control_test_base + " " + control_test_enhancement
-                    # print(control_test)
-                    # control_test = control_test.replace('-0', '-')
-                    # print(control_test)
-                    # print(Control.objects.filter(number__contains=control_test))
-
-
-
-                
-                    
-
-

@@ -37,6 +37,7 @@ class Implementation(models.Model):
     parameter = models.TextField()
     customer_responsibility = models.TextField()	
     solution = models.TextField()
+    responsible_role = models.TextField()
     implementation_status = models.CharField(
         max_length=2,
         choices=IMPLEMENTATION_STATUS_CHOICES,

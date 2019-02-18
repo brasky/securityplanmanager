@@ -147,12 +147,13 @@ def update_certification_implementations():
             implementations_to_add = Implementation.objects.filter(control=control)
             cert.implementations.add(*list(implementations_to_add))
 
-def link_implementations_to_certifications(cert_name):
-    cert = Certification.objects.get(name=cert_name)
-    for control in cert.controls.all():
-        cert.controls.add(control)
-        implementations_to_add = Implementation.objects.filter(control=control)
-        cert.implementations.add(*list(implementations_to_add))
+def link_implementations_to_certifications():
+    certs = Certification.objects.all()
+    for cert in certs:
+        for control in cert.controls.all():
+            cert.controls.add(control)
+            implementations_to_add = Implementation.objects.filter(control=control)
+            cert.implementations.add(*list(implementations_to_add))
 
 def add_certification(request):
     data = {}
@@ -163,7 +164,7 @@ def add_certification(request):
         print(form.errors)
         if form.is_valid():
             form.save()
-            link_implementations_to_certifications(form.cleaned_data['name'])
+            link_implementations_to_certifications()
             messages.success(request, 'Certification added successfully')
             return redirect('/certifications/')
     return render(request, 'add-certification.html', data)
@@ -179,7 +180,7 @@ def edit_certifications(request):
         if form.is_valid():
             form.save()
             for item in form.cleaned_data:
-                link_implementations_to_certifications(item['name'])
+                link_implementations_to_certifications()
 
             messages.success(request, 'Certification(s) edited successfully')
             return redirect('/certifications/')
@@ -235,7 +236,10 @@ def view_team(request, team_name):
 
 
 def certifications_test(request):
-    
+    # imps = Implementation.objects.all()
+    # for imp in imps:
+    #     imp.delete()
+
     # cert = Certification.objects.get(name="FedRAMP High")
     # for control in Control.objects.all():
     #     cert.controls.add(control)
@@ -263,7 +267,7 @@ def import_ssp(request):
             time = end - start
             print('SSP Parser took: ' + str(time))
             start = timer()
-            link_implementations_to_certifications(form.cleaned_data['certification'])
+            link_implementations_to_certifications()
             end = timer()
             time = end - start
             print('Linking implementations took: ' + str(time))

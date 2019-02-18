@@ -25,7 +25,7 @@ def generate_docx_ssp(baseline):
         try:   
             table_title = table.cell(0, 0).text
             table_title_column_two = table.cell(0, 1).text
-            if "Control Summary Information" in table_title_column_two:
+            if "Control Summary Information" in table_title_column_two or "Control Enhancement Summary Information" in table_title_column_two:
                 control_parent = table_title
                 if "(" not in control_parent:
                     control = control_parent + "("
@@ -45,7 +45,8 @@ def generate_docx_ssp(baseline):
                     for row in range(1,rows):
                         cell_text = table.cell(row, 0).text
                         if "Responsible Role" in cell_text:
-                            pass
+                            if matching_implementation.responsible_role not in cell_text:
+                                table.cell(row,0).text = cell_text + " " + matching_implementation.responsible_role
                         elif "Parameter" in cell_text:
                             try:
                                 if matched_control.number + ":" in cell_text:
@@ -74,57 +75,20 @@ def generate_docx_ssp(baseline):
                                 if len(p.xpath('.//w:t')) > 1:
                                     checkbox_implementation_status_text = p.xpath('.//w:t')[1].text.strip()
                                     if implementation_status == checkbox_implementation_status_text:
+                                        add_check_in_paragraph(p)
+                        elif "Control Origination" in cell_text:
+                            control_origination = matching_implementation.get_control_origination_display()
+
+                            for paragraph in table.cell(row, 0).paragraphs:
+                                p = paragraph._element
+                                if len(p.xpath('.//w:t')) > 1:
+                                    checkbox_control_origination_status_text = p.xpath('.//w:t')[1].text.strip()
+                                    if control_origination in checkbox_control_origination_status_text:
                                         checkbox = p.find('.//w14:checkbox', namespace)
                                         if checkbox is not None:
                                             checkbox[0].set("{http://schemas.microsoft.com/office/word/2010/wordml}val", "1")
-                                            # print(p.xml)
                                             p.xpath('.//w:t')[0].text = u'☒'
-                                        
-                                # checkBoxes = p.xpath('.//w14:checkbox')
-                                # print(checkBoxes)
-                                # print(checkBoxes.xml)
-                                # if len(checkBoxes) > 0:
-                                #     if len(checkBoxes[0].getchildren()) >= 2:
-                                #         print("????????????????????????????????????????")
-                                #         if checkBoxes[0].find('.//w:checked', namespace) is not None:
-                                #             print(checkBoxes[0].find('.//w:checked', namespace))
-                            # quit()
-                     
-                     
-                     
-                                            # if not checkBoxes[0].find('.//w:checked', namespace).values():
-                                            #     implementation_status = p.xpath('.//w:t')[0].text.strip()
-                                            #     # print(control_parent)
-                                            #     # print(implementation_status)
-                                            #     if 'Partially' in implementation_status:
-                                            #         implementation_status = 'PI'
-                                            #     elif 'Implemented' in implementation_status:
-                                            #         implementation_status = 'IM'
-                                            #     elif 'Planned' in implementation_status:
-                                            #         implementation_status = 'PL'
-                                            #     elif 'Alternative' in implementation_status:
-                                            #         implementation_status = 'AI'
-                                            #     elif 'Not' in implementation_status:
-                                            #         implementation_status = 'NA'
 
-
-
-
-
-
-
-
-
-
-
-
-                            # print('did we get here?')
-                            # checkboxes = table.cell(row, 0)._element.xpath('.//w:checkBox')
-                            # print(checkboxes)
-                            # checkboxes[0].append(checkedElement())
-                            # pass
-                        elif "Control Origination" in cell_text:
-                            pass
 
             elif "solution" in table_title:
                 matching_controls = previous_matched
@@ -144,8 +108,13 @@ def generate_docx_ssp(baseline):
     document.save(response)
     return response
 
-
-
+def add_check_in_paragraph(paragraph):
+    checkbox = paragraph.find('.//w14:checkbox', namespace)
+    if checkbox is not None:
+        checkbox[0].set("{http://schemas.microsoft.com/office/word/2010/wordml}val", "1")
+        paragraph.xpath('.//w:t')[0].text = u'☒'
+            
+        
 def add_implementation_to_table(table, implementation_object, control_parts):
     implementation_details = implementation_object.solution
     customer_responsibility = implementation_object.customer_responsibility
