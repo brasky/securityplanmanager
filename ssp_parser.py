@@ -44,8 +44,7 @@ def get_part_text(implementation_details, control_parts):
 
 
 def create_implementation(new_implementation):
-    print(new_implementation['control_object'], new_implementation['parameter'])
-    return
+
     if new_implementation['customer_resp']:
         new_implementation_object = Implementation(
             control=new_implementation['control_object'],
