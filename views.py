@@ -236,16 +236,16 @@ def view_team(request, team_name):
 
 
 def certifications_test(request):
-    # imps = Implementation.objects.all()
-    # for imp in imps:
-    #     imp.delete()
+    imps = Implementation.objects.all()
+    for imp in imps:
+        imp.delete()
 
     # cert = Certification.objects.get(name="FedRAMP High")
     # for control in Control.objects.all():
     #     cert.controls.add(control)
     #     implementations_to_add = Implementation.objects.filter(control=control)
     #     cert.implementations.add(*list(implementations_to_add))
-    return redirect('/')
+    return redirect('/import/ssp/')
 
     # cert.controls.set([controls])
     # implementations_to_add = Implementation.objects.filter(control__in=[controls])
@@ -272,7 +272,7 @@ def import_ssp(request):
             time = end - start
             print('Linking implementations took: ' + str(time))
             messages.success(request, 'SSP Upload Complete')
-            # return redirect('/')
+            # return redirect('/certification-test/')
     form = SSPUploadForm()
     data = {}
     data['form'] = form
