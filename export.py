@@ -97,6 +97,8 @@ def generate_docx_ssp(baseline):
                     implementation = control_to_implementation[matched_control.number]
                     add_implementation_to_table(table, implementation, control_parts)              
         except Exception as e:
+            print('Exception:')
+            print(table_title)
             print(e)
             e = sys.exc_info()[0]
             print(e)

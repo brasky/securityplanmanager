@@ -14,15 +14,7 @@ class Team(models.Model):
     def __str__(self):
         return self.name
 
-class Implementation(models.Model):
-    
-    IMPLEMENTATION_STATUS_CHOICES = (
-        ('IM', 'Implemented'),
-        ('PI', 'Partially Implemented'),
-        ('PL', 'Planned'),
-        ('AI', 'Alternative Implementation'),
-        ('NA', 'Not Applicable'),
-    )
+class ControlOrigination(models.Model):
     CONTROL_ORIGINATION_CHOICES = (
         ('SPC', 'Service Provider Corporate'),
         ('SPS', 'Service Provider System Specific'),
@@ -32,10 +24,28 @@ class Implementation(models.Model):
         ('SHA', 'Shared (Service Provider and Customer Responsibility)'),
         ('INH', 'Inherited from pre-existing Provisional Authority to Operate (P-ATO)'),
         ('NOT', 'Not Applicable'),
-    )	
+    )
+    source = models.CharField(
+        max_length=3,
+        choices=CONTROL_ORIGINATION_CHOICES,
+        default='SPS',
+    )
+
+    def __str__(self):
+        return self.get_source_display()
+
+class Implementation(models.Model):
+    
+    IMPLEMENTATION_STATUS_CHOICES = (
+        ('IM', 'Implemented'),
+        ('PI', 'Partially Implemented'),
+        ('PL', 'Planned'),
+        ('AI', 'Alternative Implementation'),
+        ('NA', 'Not Applicable'),
+    )
     control = models.ForeignKey('Control', on_delete=models.CASCADE)
     parameter = models.TextField()
-    customer_responsibility = models.TextField()	
+    customer_responsibility = models.TextField(blank=True)	
     solution = models.TextField()
     responsible_role = models.TextField()
     implementation_status = models.CharField(
@@ -43,11 +53,9 @@ class Implementation(models.Model):
         choices=IMPLEMENTATION_STATUS_CHOICES,
         default="IM",
     )
-    control_origination = models.CharField(
-        max_length=3,
-        choices=CONTROL_ORIGINATION_CHOICES,
-        default='SPS',
-    )
+
+    control_origination = models.ManyToManyField(ControlOrigination, related_name='control_origination', blank=True)
+
     def team_default():
         return Team.objects.all()	
     
@@ -56,8 +64,8 @@ class Implementation(models.Model):
     def status_verbose(self):
         return dict(Implementation.IMPLEMENTATION_STATUS_CHOICES)[self.implementation_status]
 
-    def origination_verbose(self):
-        return dict(Implementation.CONTROL_ORIGINATION_CHOICES)[self.control_origination]
+    # def origination_verbose(self):
+    #     return dict(Implementation.CONTROL_ORIGINATION_CHOICES)[self.control_origination]
 
     def __str__(self):
         team_object_list = list(self.teams.all())

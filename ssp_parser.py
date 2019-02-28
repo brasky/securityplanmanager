@@ -1,6 +1,6 @@
 from collections import defaultdict
 from docx import *
-from .models import Control, Implementation, Team
+from .models import Control, Implementation, Team, ControlOrigination
 from django.db.models import Q
 from .helper import get_control_parts
 from time import sleep
@@ -53,7 +53,7 @@ def create_implementation(new_implementation):
             customer_responsibility=new_implementation['customer_resp'],
             solution=new_implementation['solution'],
             implementation_status=new_implementation['implementation_status'],
-            control_origination=new_implementation['control_origination'],
+            
             )
     else:
         new_implementation_object = Implementation(
@@ -63,7 +63,7 @@ def create_implementation(new_implementation):
             customer_responsibility='',
             solution=new_implementation['solution'],
             implementation_status=new_implementation['implementation_status'],
-            control_origination=new_implementation['control_origination'],
+            
             )
     
     # new_implementations.append(new_implementation_object)
@@ -72,6 +72,7 @@ def create_implementation(new_implementation):
     #     implementation.teams.set(new_implementation['teams'])
     try:
         new_implementation_object.save()
+        new_implementation_object.control_origination.set(new_implementation['control_origination'])
         new_implementation_object.teams.set(new_implementation['teams'])
     except:
         # print(new_implementation)
@@ -150,38 +151,33 @@ def get_implementation_status_from_cell(implementation_cell):
 
 
 def get_control_origination_from_cell(control_origination_cell):
-    control_origination = ''
+    control_originations = []
     for paragraph in control_origination_cell.paragraphs:
         # print(paragraph.text)
         p = paragraph._element
         # checkBoxes = p.xpath('.//w:checkBox')
         # if len(checkBoxes) > 0:
         if 'w14:checked w14:val="1"' in p.xml:
-            # if len(checkBoxes[0].getchildren()) >= 2:
-                # if checkBoxes[0].find('.//w:checked', namespace) is not None:
-                    # if not checkBoxes[0].find('.//w:checked', namespace).values():
-                        # print('did we get here?')
-            # control_origination = p.xpath('.//w:t')[1].text.strip()
             xpath_elements = p.xpath('.//w:t')
             control_origination = xpath_elements[len(xpath_elements)-1].text.strip()
             # print(control_parent + ": " + control_origination)
-            if "Corporate" in control_origination:
-                control_origination = 'SPC'
-            elif "Specific" in control_origination:
-                control_origination = 'SPS'
+            if "Service Provider Corporate" in control_origination:
+                control_originations.append(ControlOrigination.objects.get(source='SPC'))
+            elif "Service Provider System Specific" in control_origination:
+                control_originations.append(ControlOrigination.objects.get(source='SPS'))
             elif "Hybrid" in control_origination:
-                control_origination = 'SPH'
+                control_originations.append(ControlOrigination.objects.get(source='SPH'))
             elif "Configured" in control_origination:
-                control_origination = 'CBC'
+                control_originations.append(ControlOrigination.objects.get(source='CBC'))
             elif "Provided" in control_origination:
-                control_origination = 'PBC'
+                control_originations.append(ControlOrigination.objects.get(source='PBC'))
             elif "Shared" in control_origination:
-                control_origination = 'SHA'
+                control_originations.append(ControlOrigination.objects.get(source='SHA'))
             elif "Inherited" in control_origination:
-                control_origination = 'INH'
+                control_originations.append(ControlOrigination.objects.get(source='INH'))
             elif "Not" in control_origination:
-                control_origination = 'NOT'
-    return control_origination
+                control_originations.append(ControlOrigination.objects.get(source='NOT'))
+    return control_originations
 
 
 namespace = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
@@ -211,7 +207,8 @@ def parse_ssp(file):
                     #     print(control_parent, implementation_status)
                                     
                 elif "Control Origination" in table.cell(cell,0).text:
-                    control_origination = get_control_origination_from_cell(table.cell(cell, 0))
+                    control_originations = get_control_origination_from_cell(table.cell(cell, 0))
+                    print(control_parent, control_originations)
                     # if control_origination == '':
                     #     print(control_parent, control_origination)
                                        
@@ -251,7 +248,7 @@ def parse_ssp(file):
                         'solution': implementation_details,
                         'customer_resp': customer_responsibility,
                         'teams': Team.objects.all(),
-                        'control_origination': control_origination,
+                        'control_origination': control_originations,
                         'implementation_status': implementation_status,
                         'parameter': parameter,
                         'responsible_role': responsible_role
@@ -276,7 +273,7 @@ def parse_ssp(file):
                         'solution': implementation_details,
                         'customer_resp': customer_responsibility,
                         'teams': Team.objects.all(),
-                        'control_origination': control_origination,
+                        'control_origination': control_originations,
                         'implementation_status': implementation_status,
                         'parameter': parameter,
                         'responsible_role': responsible_role
@@ -295,12 +292,13 @@ def parse_ssp(file):
                         implementation_details = get_part_text(implementation_details, control_parts)
                     parameter = parameters[control_object.number.replace(' ', '')]
                     # print(parameters)
+                    
                     new_implementation = {
                         'control_object': control_object,
                         'solution': implementation_details,
                         'customer_resp': customer_responsibility,
                         'teams': Team.objects.all(),
-                        'control_origination': control_origination,
+                        'control_origination': control_originations,
                         'implementation_status': implementation_status,
                         'parameter': parameter,
                         'responsible_role': responsible_role
@@ -336,7 +334,7 @@ def parse_ssp(file):
                         'solution': implementation_details,
                         'customer_resp': customer_responsibility,
                         'teams': Team.objects.all(),
-                        'control_origination': control_origination,
+                        'control_origination': control_originations,
                         'implementation_status': implementation_status,
                         'parameter': parameter,
                         'responsible_role': responsible_role
