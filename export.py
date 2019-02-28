@@ -77,17 +77,19 @@ def generate_docx_ssp(baseline):
                                     if implementation_status == checkbox_implementation_status_text:
                                         add_check_in_paragraph(p)
                         elif "Control Origination" in cell_text:
-                            control_origination = matching_implementation.get_control_origination_display()
+                            control_originations = matching_implementation.control_origination.all()
 
-                            for paragraph in table.cell(row, 0).paragraphs:
-                                p = paragraph._element
-                                if len(p.xpath('.//w:t')) > 1:
-                                    checkbox_control_origination_status_text = p.xpath('.//w:t')[1].text.strip()
-                                    if control_origination in checkbox_control_origination_status_text:
-                                        checkbox = p.find('.//w14:checkbox', namespace)
-                                        if checkbox is not None:
-                                            checkbox[0].set("{http://schemas.microsoft.com/office/word/2010/wordml}val", "1")
-                                            p.xpath('.//w:t')[0].text = u'☒'
+                            for control_origination_object in control_originations:
+                                control_origination = control_origination_object.get_source_display()
+                                for paragraph in table.cell(row, 0).paragraphs:
+                                    p = paragraph._element
+                                    if len(p.xpath('.//w:t')) > 1:
+                                        checkbox_control_origination_status_text = p.xpath('.//w:t')[1].text.strip()
+                                        if control_origination in checkbox_control_origination_status_text:
+                                            checkbox = p.find('.//w14:checkbox', namespace)
+                                            if checkbox is not None:
+                                                checkbox[0].set("{http://schemas.microsoft.com/office/word/2010/wordml}val", "1")
+                                                p.xpath('.//w:t')[0].text = u'☒'
 
 
             elif "solution" in table_title:
