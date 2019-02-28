@@ -31,7 +31,13 @@ Teams:
 <br>
 {{ implementation.get_implementation_status_display}}
 <br>
-{{ implementation.get_control_origination_display }}
+<br>
+{% for control_origination in implementation.control_origination.all %}
+
+{{ control_origination.get_source_display }}
+<br>
+
+{% endfor %}
 <br>
 {{ implementation.solution }}
 <br>
