@@ -1,9 +1,10 @@
 from collections import defaultdict
 from docx import *
-from .models import Control, Implementation, Team, ControlOrigination
+from .models import Control, Implementation, Team, ControlOrigination, Certification
 from django.db.models import Q
 from .helper import get_control_parts
 from time import sleep
+import sys
 
 def get_customer_responsibility(implementation_details):
     teams = Team.objects.all()
@@ -74,9 +75,13 @@ def create_implementation(new_implementation):
         new_implementation_object.save()
         new_implementation_object.control_origination.set(new_implementation['control_origination'])
         new_implementation_object.teams.set(new_implementation['teams'])
+        cert = Certification.objects.get(name__contains="High")
+        cert.implementations.add(new_implementation_object)
+        # cert.save()
     except:
-        # print(new_implementation)
-        pass
+        e = sys.exc_info()[0]
+        print( "Error: %s" % e )
+        
 
 def parse_solution_table(table, control_object, control_parts):
     control_number = control_object.number
@@ -182,6 +187,7 @@ def get_control_origination_from_cell(control_origination_cell):
 
 namespace = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
 implementations = []
+
 def parse_ssp(file):
     document = Document(file)
     # print('we made it here')
@@ -208,7 +214,7 @@ def parse_ssp(file):
                                     
                 elif "Control Origination" in table.cell(cell,0).text:
                     control_originations = get_control_origination_from_cell(table.cell(cell, 0))
-                    print(control_parent, control_originations)
+                    # print(control_parent, control_originations)
                     # if control_origination == '':
                     #     print(control_parent, control_origination)
                                        
@@ -222,8 +228,11 @@ def parse_ssp(file):
                     control = control.replace('Parameter ', '').strip().replace('-0', '-').replace(' ', '')
                     
                     if control.count('-') == 2:
+                        param_number = control[-1:] + ': '
                         control = control[:-2]
-                    parameters[control] += parameter + '\n'
+                        parameters[control] += param_number + parameter + '\n'
+                    else:
+                        parameters[control] += parameter + '\n'
         
         elif "solution" in table_title:
             

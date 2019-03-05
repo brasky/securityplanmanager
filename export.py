@@ -41,7 +41,7 @@ def generate_docx_ssp(baseline):
                     matching_implementation = Implementation.objects.get(control=matched_control)
                     control_to_implementation[matched_control.number] = matching_implementation
                     rows = len(table.rows)
-                    print(matched_control.number)
+                    # print(matched_control.number)
                     for row in range(1,rows):
                         cell_text = table.cell(row, 0).text
                         if "Responsible Role" in cell_text:
@@ -51,18 +51,18 @@ def generate_docx_ssp(baseline):
                             try:
                                 if matched_control.number + ":" in cell_text:
                                     table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
-                                elif '-1:' in cell_text:
-                                    sub_param = matching_implementation.parameter.split(';')[0]
-                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.replace('1.', '')
-                                elif '-2:' in cell_text:
-                                    sub_param = matching_implementation.parameter.split(';')[1]
-                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.replace('2.', '')
-                                elif '-3:' in cell_text:
-                                    sub_param = matching_implementation.parameter.split(';')[2]
-                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.replace('3.', '')
-                                elif '-4' in cell_text:
-                                    sub_param = matching_implementation.parameter.split(';')[3]
-                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.replace('4.', '')
+                                elif '-1:' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                    sub_param = matching_implementation.parameter.split('2:')[0]
+                                    table.cell(row, 0).text = table.cell(row, 0).text + ' ' + sub_param.replace('1:', '').strip()
+                                elif '-2:' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                    sub_param = matching_implementation.parameter.split('3:')[0].split('2:')[1]
+                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
+                                elif '-3:' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                    sub_param = matching_implementation.parameter.split(':4')[0].split('3:')[1]
+                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
+                                elif '-4' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                    sub_param = matching_implementation.parameter.split('4:')[1]
+                                    table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
                             except IndexError:
                                 table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
                             
@@ -74,7 +74,7 @@ def generate_docx_ssp(baseline):
                                 p = paragraph._element
                                 if len(p.xpath('.//w:t')) > 1:
                                     checkbox_implementation_status_text = p.xpath('.//w:t')[1].text.strip()
-                                    if implementation_status == checkbox_implementation_status_text:
+                                    if implementation_status.lower() == checkbox_implementation_status_text.lower():
                                         add_check_in_paragraph(p)
                         elif "Control Origination" in cell_text:
                             control_originations = matching_implementation.control_origination.all()
@@ -85,19 +85,23 @@ def generate_docx_ssp(baseline):
                                     p = paragraph._element
                                     if len(p.xpath('.//w:t')) > 1:
                                         checkbox_control_origination_status_text = p.xpath('.//w:t')[1].text.strip()
-                                        if control_origination in checkbox_control_origination_status_text:
+                                        if control_origination.lower() in checkbox_control_origination_status_text.lower():
                                             checkbox = p.find('.//w14:checkbox', namespace)
                                             if checkbox is not None:
                                                 checkbox[0].set("{http://schemas.microsoft.com/office/word/2010/wordml}val", "1")
                                                 p.xpath('.//w:t')[0].text = u'☒'
-
+                                        elif "Inherited" in control_origination and "Inherited" in checkbox_control_origination_status_text:
+                                            checkbox = p.find('.//w14:checkbox', namespace)
+                                            if checkbox is not None:
+                                                checkbox[0].set("{http://schemas.microsoft.com/office/word/2010/wordml}val", "1")
+                                                p.xpath('.//w:t')[0].text = u'☒'                                            
 
             elif "solution" in table_title:
                 matching_controls = previous_matched
                 for matched_control in matching_controls:
                     control_parts = get_control_parts(matched_control.number)
                     implementation = control_to_implementation[matched_control.number]
-                    add_implementation_to_table(table, implementation, control_parts)              
+                    add_implementation_to_table(table, implementation, control_parts)
         except Exception as e:
             print('Exception:')
             print(table_title)
@@ -105,8 +109,6 @@ def generate_docx_ssp(baseline):
             e = sys.exc_info()[0]
             print(e)
 
-
-   
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = 'attachment; filename=high-ssp.docx'
     document.save(response)

@@ -94,11 +94,11 @@ def add_implementation(request, control_pk):
     if request.method == "POST":
         form = AddImplementationForm(request.POST)
         if form.is_valid():
-            form.save()
-            update_certification_implementations()
+            implementation = form.save()
+            for certification in control.certifications.all():
+                certification.implementations.add(implementation)
             messages.success(request, 'Implementation added successfully')
             return redirect('/implementations/' + str(control_pk))
-
     return render(request, 'add-implementation.html', {'form': form, 'pk': control_pk})
 
 def edit_implementations(request, control_pk):
@@ -115,7 +115,6 @@ def edit_implementations(request, control_pk):
         print(form.errors)
         if form.is_valid():
             form.save()
-            update_certification_implementations()
             messages.success(request, 'Implementation(s) edited successfully')
             return redirect('/implementations/' + str(control_pk))
     return render(request, 'edit-implementation.html', {'formset': formset, 'pk': control_pk, 'control': control})
@@ -140,21 +139,6 @@ def certifications(request):
             data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
     return render(request, 'certifications.html', data)
 
-def update_certification_implementations():
-    for cert in Certification.objects.all():
-        for control in cert.controls.all():
-            cert.controls.add(control)
-            implementations_to_add = Implementation.objects.filter(control=control)
-            cert.implementations.add(*list(implementations_to_add))
-
-def link_implementations_to_certifications():
-    certs = Certification.objects.all()
-    for cert in certs:
-        for control in cert.controls.all():
-            cert.controls.add(control)
-            implementations_to_add = Implementation.objects.filter(control=control)
-            cert.implementations.add(*list(implementations_to_add))
-
 def add_certification(request):
     data = {}
     form = AddCertificationForm()
@@ -164,7 +148,6 @@ def add_certification(request):
         print(form.errors)
         if form.is_valid():
             form.save()
-            link_implementations_to_certifications()
             messages.success(request, 'Certification added successfully')
             return redirect('/certifications/')
     return render(request, 'add-certification.html', data)
@@ -179,9 +162,6 @@ def edit_certifications(request):
         print(form.errors)
         if form.is_valid():
             form.save()
-            for item in form.cleaned_data:
-                link_implementations_to_certifications()
-
             messages.success(request, 'Certification(s) edited successfully')
             return redirect('/certifications/')
     return render(request, 'edit-certifications.html', data)
@@ -266,11 +246,6 @@ def import_ssp(request):
             end = timer()
             time = end - start
             print('SSP Parser took: ' + str(time))
-            start = timer()
-            link_implementations_to_certifications()
-            end = timer()
-            time = end - start
-            print('Linking implementations took: ' + str(time))
             messages.success(request, 'SSP Upload Complete')
             # return redirect('/certification-test/')
     form = SSPUploadForm()
@@ -286,6 +261,4 @@ def export_download(request, doc_name, baseline, format):
         return generate_docx_ssp(baseline)
 
     return redirect('/')
-    pass
-
 

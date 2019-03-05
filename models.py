@@ -5,7 +5,7 @@ class Control(models.Model):
     control_text = models.TextField()
     supplemental_guidance = models.TextField()
     def __str__(self):
-        return self.number	
+        return self.number
 
 
 class Team(models.Model):
@@ -44,7 +44,7 @@ class Implementation(models.Model):
         ('NA', 'Not Applicable'),
     )
     control = models.ForeignKey('Control', on_delete=models.CASCADE)
-    parameter = models.TextField()
+    parameter = models.TextField(blank=True)
     customer_responsibility = models.TextField(blank=True)	
     solution = models.TextField()
     responsible_role = models.TextField()
@@ -63,9 +63,6 @@ class Implementation(models.Model):
 
     def status_verbose(self):
         return dict(Implementation.IMPLEMENTATION_STATUS_CHOICES)[self.implementation_status]
-
-    # def origination_verbose(self):
-    #     return dict(Implementation.CONTROL_ORIGINATION_CHOICES)[self.control_origination]
 
     def __str__(self):
         team_object_list = list(self.teams.all())
