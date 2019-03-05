@@ -252,17 +252,21 @@ def parse_ssp(file):
                         # print(control_object.number)
                         # print(implementation_details)
                     parameter = parameters[control_object.number]
-                    new_implementation = {
-                        'control_object': control_object,
-                        'solution': implementation_details,
-                        'customer_resp': customer_responsibility,
-                        'teams': Team.objects.all(),
-                        'control_origination': control_originations,
-                        'implementation_status': implementation_status,
-                        'parameter': parameter,
-                        'responsible_role': responsible_role
-                    }
-                    create_implementation(new_implementation)
+                    if implementation_details:
+                        implementations_grouped_by_team = split_implementations(implementation_details)
+                        for split_implementation in implementations_grouped_by_team:
+                            teams, solution = split_implementation
+                            new_implementation = {
+                                'control_object': control_object,
+                                'solution': solution,
+                                'customer_resp': customer_responsibility,
+                                'teams': teams,
+                                'control_origination': control_originations,
+                                'implementation_status': implementation_status,
+                                'parameter': parameter,
+                                'responsible_role': responsible_role
+                            }
+                            create_implementation(new_implementation)
 
             elif len(control_parent) == 4:
                 # print('second')
@@ -277,20 +281,23 @@ def parse_ssp(file):
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
                     parameter = parameters[control_object.number]
-                    new_implementation = {
-                        'control_object': control_object,
-                        'solution': implementation_details,
-                        'customer_resp': customer_responsibility,
-                        'teams': Team.objects.all(),
-                        'control_origination': control_originations,
-                        'implementation_status': implementation_status,
-                        'parameter': parameter,
-                        'responsible_role': responsible_role
-                    }
-                    create_implementation(new_implementation)
+                    if implementation_details:
+                        implementations_grouped_by_team = split_implementations(implementation_details)
+                        for split_implementation in implementations_grouped_by_team:
+                            teams, solution = split_implementation
+                            new_implementation = {
+                                'control_object': control_object,
+                                'solution': solution,
+                                'customer_resp': customer_responsibility,
+                                'teams': teams,
+                                'control_origination': control_originations,
+                                'implementation_status': implementation_status,
+                                'parameter': parameter,
+                                'responsible_role': responsible_role
+                            }
+                            create_implementation(new_implementation)
 
-
-            elif ' ' in control_parent and "Req." not in control_parent:
+            elif ' ' in control_parent and "Req." not in control_parent: #enhancements with spaces
                 # print('third')
                 control = control_parent.replace('-0', '-')
                 matching_controls = Control.objects.filter(number__contains=control)
@@ -301,20 +308,34 @@ def parse_ssp(file):
                         implementation_details = get_part_text(implementation_details, control_parts)
                     parameter = parameters[control_object.number.replace(' ', '')]
                     # print(parameters)
+                    if implementation_details:
+                        implementations_grouped_by_team = split_implementations(implementation_details)
+                        for split_implementation in implementations_grouped_by_team:
+                            teams, solution = split_implementation
+                            new_implementation = {
+                                'control_object': control_object,
+                                'solution': solution,
+                                'customer_resp': customer_responsibility,
+                                'teams': teams,
+                                'control_origination': control_originations,
+                                'implementation_status': implementation_status,
+                                'parameter': parameter,
+                                'responsible_role': responsible_role
+                            }
+                            create_implementation(new_implementation)
+                    # new_implementation = {
+                    #     'control_object': control_object,
+                    #     'solution': implementation_details,
+                    #     'customer_resp': customer_responsibility,
+                    #     'teams': Team.objects.all(),
+                    #     'control_origination': control_originations,
+                    #     'implementation_status': implementation_status,
+                    #     'parameter': parameter,
+                    #     'responsible_role': responsible_role
+                    # }
+                    # create_implementation(new_implementation)
                     
-                    new_implementation = {
-                        'control_object': control_object,
-                        'solution': implementation_details,
-                        'customer_resp': customer_responsibility,
-                        'teams': Team.objects.all(),
-                        'control_origination': control_originations,
-                        'implementation_status': implementation_status,
-                        'parameter': parameter,
-                        'responsible_role': responsible_role
-                    }
-                    create_implementation(new_implementation)
-                    
-            elif "Req." not in control_parent:
+            elif "Req." not in control_parent: #enhancements without spaces
                 control_base = control_parent[:5]
 
                 control_enhancement = control_parent[5:]
@@ -338,15 +359,50 @@ def parse_ssp(file):
                     if control_parts['part_num']:
                         implementation_details = get_part_text(implementation_details, control_parts)
                     parameter = parameters[control_object.number]
-                    new_implementation = {
-                        'control_object': control_object,
-                        'solution': implementation_details,
-                        'customer_resp': customer_responsibility,
-                        'teams': Team.objects.all(),
-                        'control_origination': control_originations,
-                        'implementation_status': implementation_status,
-                        'parameter': parameter,
-                        'responsible_role': responsible_role
-                    }
-                    create_implementation(new_implementation)
+                    if implementation_details:
+                        implementations_grouped_by_team = split_implementations(implementation_details)
+                        for split_implementation in implementations_grouped_by_team:
+                            teams, solution = split_implementation
+                            new_implementation = {
+                                'control_object': control_object,
+                                'solution': solution,
+                                'customer_resp': customer_responsibility,
+                                'teams': teams,
+                                'control_origination': control_originations,
+                                'implementation_status': implementation_status,
+                                'parameter': parameter,
+                                'responsible_role': responsible_role
+                            }
+                            create_implementation(new_implementation)
 
+
+def split_implementations(implementation_details):
+    # teams = Team.objects.all()
+    # [(['team1', 'team2'],'solution'), (['team3', 'team4'],'solution'), (['team5'],'solution')]
+    team_counter = defaultdict(int)
+    newline_split = implementation_details.split('\n')
+    result = []
+    solution_flag = False
+    team_list = []
+    solution = ''
+    for line in newline_split:
+
+        comma_separated = line.split(',')
+        if Team.objects.filter(name=comma_separated[0].strip(' ,:')) and ':' in line:
+            if solution_flag:
+                result.append((team_list, solution))
+                team_list = []
+                solution = ''
+            for team in comma_separated:
+                team_list.append(Team.objects.get(name__iexact=team.strip(' ,:')))
+            solution_flag = True
+        elif solution_flag:
+            solution += line + '\n'
+    if team_list:
+        result.append((team_list, solution))
+    return result
+            #this is the solution
+
+            
+
+        
