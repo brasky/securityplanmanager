@@ -1,10 +1,11 @@
 import xmltodict
 from re import sub
 import re, csv
-
+from collections import defaultdict
 
 control_catalog = {}
 guidance_catalog = {}
+baseline_catalog = defaultdict(lambda: defaultdict(bool))
 
 def convert_control_number(control_number):
     parens = ['(', ')']
@@ -65,6 +66,11 @@ def add_main_controls_to_catalog(control):
                     statements = (first_statement, statement, final_statement_dict)
                     description = ' '.join(list(map(get_description, statements)))
                     control_catalog[control_number] = description
+                    if isinstance(control.get('baseline-impact', []), str):
+                        baseline_catalog[control_number][control.get('baseline-impact', [])] = True
+                    else:    
+                        for baseline in control.get('baseline-impact', []):
+                            baseline_catalog[control_number][baseline] = True
                     if supplemental_guidance:
                         guidance_catalog[control_number] = supplemental_guidance
             else:
@@ -72,6 +78,11 @@ def add_main_controls_to_catalog(control):
                 statements = (first_statement, statement)
                 description = ' '.join(list(map(get_description, statements)))
                 control_catalog[control_number] = description
+                if isinstance(control.get('baseline-impact', []), str):
+                    baseline_catalog[control_number][control.get('baseline-impact', [])] = True
+                else:    
+                    for baseline in control.get('baseline-impact', []):
+                        baseline_catalog[control_number][baseline] = True
                 if supplemental_guidance:
                     guidance_catalog[control_number] = supplemental_guidance
 
@@ -79,6 +90,11 @@ def add_main_controls_to_catalog(control):
         control_number = convert_control_number(control.get('number'))
         description = get_description(first_statement)
         control_catalog[control_number] = description
+        if isinstance(control.get('baseline-impact', []), str):
+            baseline_catalog[control_number][control.get('baseline-impact', [])] = True
+        else:    
+            for baseline in control.get('baseline-impact', []):
+                baseline_catalog[control_number][baseline] = True
         if supplemental_guidance:
             guidance_catalog[control_number] = supplemental_guidance
 
@@ -106,6 +122,11 @@ def add_enhancements_to_catalog(control):
                                     control_number = convert_control_number(final_statement_dict.get('number'))
                                     description = ' '.join(list(map(get_description, statements)))
                                     control_catalog[control_number] = description
+                                    if isinstance(enhancement.get('baseline-impact', []), str):
+                                        baseline_catalog[control_number][enhancement.get('baseline-impact', [])] = True
+                                    else:    
+                                        for baseline in enhancement.get('baseline-impact', []):
+                                            baseline_catalog[control_number][baseline] = True
                                     if supplemental_guidance:
                                         guidance_catalog[control_number] = supplemental_guidance
                             else:
@@ -113,18 +134,33 @@ def add_enhancements_to_catalog(control):
                                 statements = (first_statement, second_statement)
                                 description = ' '.join(list(map(get_description, statements)))
                                 control_catalog[control_number] = description
+                                if isinstance(enhancement.get('baseline-impact', []), str):
+                                    baseline_catalog[control_number][enhancement.get('baseline-impact', [])] = True
+                                else:    
+                                    for baseline in enhancement.get('baseline-impact', []):
+                                        baseline_catalog[control_number][baseline] = True
                                 if supplemental_guidance:
                                     guidance_catalog[control_number] = supplemental_guidance
                     else:
                         control_number = convert_control_number(enhancement.get('number'))
                         description = get_description(first_statement)
                         control_catalog[control_number] = description
+                        if isinstance(enhancement.get('baseline-impact', []), str):
+                            baseline_catalog[control_number][enhancement.get('baseline-impact', [])] = True
+                        else:    
+                            for baseline in enhancement.get('baseline-impact', []):
+                                baseline_catalog[control_number][baseline] = True
                         if supplemental_guidance:
                             guidance_catalog[control_number] = supplemental_guidance
                 except:
                     control_number = convert_control_number(control.get('control-enhancements').get('control-enhancement').get('number'))
                     description = get_description(control.get('control-enhancements').get('control-enhancement').get('statement'))
                     control_catalog[control_number] = description
+                    if isinstance(enhancement.get('baseline-impact', []), str):
+                        baseline_catalog[control_number][enhancement.get('baseline-impact', [])] = True
+                    else:    
+                        for baseline in enhancement.get('baseline-impact', []):
+                            baseline_catalog[control_number][baseline] = True
                     if supplemental_guidance:
                         guidance_catalog[control_number] = supplemental_guidance
         else:
@@ -139,12 +175,22 @@ def add_enhancements_to_catalog(control):
                     control_number = convert_control_number(statement.get('number'))
                     description = ' '.join(list(map(get_description, statements)))
                     control_catalog[control_number] = description
+                    if isinstance(control.get('control-enhancements').get('control-enhancement').get('baseline-impact', []), str):
+                        baseline_catalog[control_number][control.get('control-enhancements').get('control-enhancement').get('baseline-impact', [])] = True
+                    else:    
+                        for baseline in control.get('control-enhancements').get('control-enhancement').get('baseline-impact', []):
+                            baseline_catalog[control_number][baseline] = True                  
                     if supplemental_guidance:
                         guidance_catalog[control_number] = supplemental_guidance
             else:
                 control_number = convert_control_number(control.get('control-enhancements').get('control-enhancement').get('number'))
                 description = get_description(control.get('control-enhancements').get('control-enhancement').get('statement'))
                 control_catalog[control_number] = description
+                if isinstance(control.get('control-enhancements').get('control-enhancement').get('baseline-impact', []), str):
+                    baseline_catalog[control_number][control.get('control-enhancements').get('control-enhancement').get('baseline-impact', [])] = True
+                else:    
+                    for baseline in control.get('control-enhancements').get('control-enhancement').get('baseline-impact', []):
+                        baseline_catalog[control_number][baseline] = True
 with open('800-53-controls.xml') as controls_xml:
     control_dict = xmltodict.parse(controls_xml.read())
     # print("")
@@ -168,6 +214,19 @@ with open('control-list.csv','w', newline='') as f:
 with open('control_guidance_list.csv', 'w', newline='') as f:
     w = csv.writer(f)
     w.writerows(guidance_catalog.items())
+
+with open('baselines.csv', 'w', newline='') as f:
+    w = csv.writer(f)
+    rows = []
+    for control in baseline_catalog.items():
+        row = []
+        row.append(control[0])
+        row.append(control[1]['LOW'])
+        row.append(control[1]['MODERATE'])
+        row.append(control[1]['HIGH'])
+        rows.append(row)
+    w.writerows(rows)
+
 print("Done")
 
 

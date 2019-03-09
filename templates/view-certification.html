@@ -14,12 +14,31 @@
 </ul>
 {% endif %}
 <h1 class="page-header text-center">{{certification.name}} Implementations</h1>
+<h2>Controls without implementations:</h2>
+<br>
+{% for control in missing_controls %}
+{{control.number}}
+<br>
+{% endfor %}
+
+<h2>Implementations missing team responses:</h2>
+<br>
+{% for team, team_controls in team_missing.items %}
+{{ team }}:
+{% for team_missing_control in team_controls %}
+<br>
+{{team_missing_control.number}}
+{% endfor %}
+<br>
+<br>
+
+{% endfor %}
 
 
-{% for implementation in implementations %}
+{% comment %} {% for implementation in implementations %}
 <a href="/implementations/{{implementation.control.pk}}/">{{ implementation.control.number}} - {{ implementation.teams.all|join:', ' }}</a>
 <br> <br> 
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 
 </body>

@@ -379,7 +379,6 @@ def parse_ssp(file):
 def split_implementations(implementation_details):
     # teams = Team.objects.all()
     # [(['team1', 'team2'],'solution'), (['team3', 'team4'],'solution'), (['team5'],'solution')]
-    team_counter = defaultdict(int)
     newline_split = implementation_details.split('\n')
     result = []
     solution_flag = False

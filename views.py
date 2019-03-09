@@ -13,6 +13,7 @@ from django.db.models import Count
 from .ssp_parser import parse_ssp
 from .export import generate_docx_ssp
 from timeit import default_timer as timer
+from collections import defaultdict
 
 
 
@@ -169,11 +170,33 @@ def edit_certifications(request):
 def view_certification(request, certification_name):
     cert = Certification.objects.get(name=certification_name)
     all_implementations = cert.implementations.all()
-    data = {'certification': cert,
-            'implementations': all_implementations}
 
+    #controls missing implementations from teams
+    all_controls = cert.controls.all()
+    answered_controls = [implementation.control for implementation in all_implementations]
+    missing_controls = []
+    for control in all_controls:
+        if control not in answered_controls:
+            missing_controls.append(control)
+    
+    teams = Team.objects.all()
+    missing_controls_by_team = defaultdict(list)
+    for team in teams:
+        team_implementations = team.implementations.all()
+        team_answered = [implementation.control for implementation in team_implementations]
+        for control in all_controls:
+            if control not in team_answered:
+                missing_controls_by_team[team.name].append(control)
+    missing_controls_by_team = dict(missing_controls_by_team)
+    print(missing_controls_by_team)
+    # missing_controls_by_team = {'test': 'testing'}
+    data = {'certification': cert,
+            'implementations': all_implementations,
+            'missing_controls': missing_controls,
+            'team_missing': missing_controls_by_team}
+    #control families with a percentage of how many are answered and the implementation status breakdown
+    
     return render(request, 'view-certification.html', data)
-    pass
 
 def teams(request):
     data = {}
@@ -219,12 +242,13 @@ def certifications_test(request):
     imps = Implementation.objects.all()
     for imp in imps:
         imp.delete()
-
+    # controls = Control.objects.all()
+    # for control in controls:
+    #     control.delete()
     # cert = Certification.objects.get(name="FedRAMP High")
-    # for control in Control.objects.all():
+    # for control in Control.objects.filter(high_baseline=True):
     #     cert.controls.add(control)
-    #     implementations_to_add = Implementation.objects.filter(control=control)
-    #     cert.implementations.add(*list(implementations_to_add))
+
     return redirect('/import/ssp/')
 
     # cert.controls.set([controls])
