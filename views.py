@@ -185,10 +185,10 @@ def view_certification(request, certification_name):
         team_implementations = team.implementations.all()
         team_answered = [implementation.control for implementation in team_implementations]
         for control in all_controls:
-            if control not in team_answered:
+            if control not in team_answered and control in answered_controls:
                 missing_controls_by_team[team.name].append(control)
     missing_controls_by_team = dict(missing_controls_by_team)
-    print(missing_controls_by_team)
+    # print(missing_controls_by_team)
     # missing_controls_by_team = {'test': 'testing'}
     data = {'certification': cert,
             'implementations': all_implementations,
