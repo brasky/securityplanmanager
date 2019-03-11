@@ -1,0 +1,39 @@
+{% autoescape off  %}
+{% if controls  %}
+
+{% for control in controls %}
+
+
+
+	<a href="/implementations/{{control.0}}"><li class="list-group-item" id="{{ control.0 }}"><span class="control-name">{{ control.1 }}</a>: </span><span class="control-text">{{control.2}}</span>
+
+	
+	
+{% comment %} {% if control.3  %}
+	<div id="guidance-{{control.0}}" class="hidden">
+		<ul>
+		<li class="list-group-item list-group-item-warning"><div class="guidance-header">Supplemental Guidance:</div>{{ control.3  }} </li>
+		<a href="/implementations/{{control.0}}"><li class="list-group-item list-unstyled">View Implementations and Supplemental Guidance</a></li>
+	</ul>
+</div>
+{% else %}
+	<div id="guidance-{{control.0}}" class="hidden">
+		<ul>
+		<li class="list-group-item list-unstyled"><a href="/implementations/{{control.0}}">View Implementations and Supplemental Guidance</a></li>
+	</ul>
+</div>
+{% endif  %} {% endcomment %}
+
+
+	</li>
+
+
+{% endfor  %}
+
+{% else  %}
+
+<h1> None to show</h1>
+
+{% endif  %}
+
+{% endautoescape  %}

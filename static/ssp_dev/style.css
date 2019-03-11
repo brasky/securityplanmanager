@@ -36,3 +36,10 @@ ul > li.list-unstyled:hover {
 	background-color:#f5f5f5;
 	cursor: pointer;
 } 
+
+#nav-search-results {
+	float:right;
+	width: 20%;
+	max-height: 500px;
+	overflow-y: auto;
+}

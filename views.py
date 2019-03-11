@@ -79,6 +79,38 @@ def search(request):
 
     return render_to_response('ajax_search.html', {'controls': results})
 
+def nav_search(request):
+    if request.method == "POST":
+        search_text = request.POST['search_text']
+    else:
+        search_text = ''
+    all_controls, control_dict, control_guidance = get_all_controls()
+    print(search_text)
+    search_results = process.extract(
+        search_text, all_controls, limit=10, scorer=fuzz.partial_ratio)
+#	print(search_results)
+    results = []
+    counter = 0
+    for result in search_results:
+
+        temp_result = []
+        control = result[0].split(':')[0]
+ 
+
+        temp_result.append(Control.objects.get(number=control).pk)
+        counter += 1
+        temp_result.append(control)
+        if len(search_text) > 2:
+            control_text = highlight_matches(
+                search_text, control_dict[control])
+        else:
+            control_text = control_dict[control]
+        temp_result.append(control_text)
+        temp_result.append(control_guidance[control])
+        results.append(temp_result)
+
+
+    return render_to_response('nav-search.html', {'controls': results})
 
 def implementations(request, control_pk):
     control = Control.objects.get(pk=control_pk)

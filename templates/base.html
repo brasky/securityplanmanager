@@ -39,13 +39,25 @@
         
         
       </ul>
-
-      
+      <form class="navbar-form navbar-right">
+        <div class="form-group">
+          {% csrf_token  %}
+         
+          <input type="text" id="nav-search" class="form-control" placeholder="Search" value="">
+          
+        </div>
+      </form>
     </div><!-- /.navbar-collapse -->
+
   </div><!-- /.container-fluid -->
+
 </nav>
+  <ul id="nav-search-results">
+  </ul>
+<body>
 {% block content  %}
 
 {% endblock content %}
 
+<script src="{% static 'ssp_dev/nav-search.js'  %}"></script>
 </html>
