@@ -11,6 +11,8 @@ from .helper import get_control_parts
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn, nsmap
 import sys
+from django.db.models.query import QuerySet
+
 
 namespace = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w14': 'http://schemas.microsoft.com/office/word/2010/wordml' }
 
@@ -38,8 +40,15 @@ def generate_docx_ssp(baseline):
                     matching_controls = Control.objects.filter(Q(number__contains=control))
                 previous_matched = matching_controls
                 for matched_control in matching_controls:
-                    matching_implementation = Implementation.objects.get(control=matched_control)
-                    control_to_implementation[matched_control.number] = matching_implementation
+                    try:
+                        matching_implementation = Implementation.objects.get(control=matched_control)
+                        control_to_implementation[matched_control.number] = matching_implementation
+                    except Implementation.MultipleObjectsReturned as e:
+                        matching_implementation_group = Implementation.objects.filter(control=matched_control)
+                        matching_implementation = matching_implementation_group[0]
+                        control_to_implementation[matched_control.number] = matching_implementation_group
+                        # print(matching_implementation)
+                    
                     rows = len(table.rows)
                     # print(matched_control.number)
                     for row in range(1,rows):
@@ -68,7 +77,6 @@ def generate_docx_ssp(baseline):
                             
                         elif "Implementation" in cell_text:
                             implementation_status = matching_implementation.get_implementation_status_display()
-                            
                             for paragraph in table.cell(row, 0).paragraphs:
                                 
                                 p = paragraph._element
@@ -100,14 +108,23 @@ def generate_docx_ssp(baseline):
                 matching_controls = previous_matched
                 for matched_control in matching_controls:
                     control_parts = get_control_parts(matched_control.number)
+                    # print("getting implementation")
                     implementation = control_to_implementation[matched_control.number]
-                    add_implementation_to_table(table, implementation, control_parts)
+                    # print(implementation)
+                    if isinstance(implementation, QuerySet):
+                        for imp in implementation:
+                            # print("more than one imp")
+                            add_implementation_to_table(table, imp, control_parts)
+                    else:
+                        # print("one or fewer imp")
+                        add_implementation_to_table(table, implementation, control_parts)
         except Exception as e:
             print('Exception:')
             print(table_title)
             print(e)
             e = sys.exc_info()[0]
             print(e)
+
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document')
     response['Content-Disposition'] = 'attachment; filename=high-ssp.docx'
@@ -123,15 +140,18 @@ def add_check_in_paragraph(paragraph):
         
 def add_implementation_to_table(table, implementation_object, control_parts):
     implementation_details = implementation_object.solution
+    teams = implementation_object.teams.all()
+    teams = ", ".join(map(str, teams))
+    teams += ":"
     customer_responsibility = implementation_object.customer_responsibility
     if  not control_parts['part_letter'] and not control_parts['part_num']: #no letter, no part, no enhancement
         if customer_responsibility:
             if "Customer Responsibility:" not in customer_responsibility:
-                table.cell(0, 1).text = "Customer Responsibility:" + "\n" + customer_responsibility + "\n" + implementation_details
+                table.cell(0, 1).text += "\n" + "Customer Responsibility:" + "\n" + customer_responsibility + "\n" + teams + "\n" + implementation_details
             else:
-                table.cell(0, 1).text = customer_responsibility + "\n" + implementation_details
+                table.cell(0, 1).text += "\n" + customer_responsibility + "\n" + teams + "\n" + implementation_details
         else:
-            table.cell(0, 1).text = implementation_details
+            table.cell(0, 1).text += "\n" + teams + "\n" + implementation_details
 
     elif not control_parts['part_num']:#letter, no part, no enhancement
         
@@ -140,14 +160,14 @@ def add_implementation_to_table(table, implementation_object, control_parts):
                 table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                 + "Customer Responsibility:" + "\n"
                                                                 + customer_responsibility + "\n"
-                                                                + implementation_details + "\n")
+                                                                + teams + "\n" + implementation_details + "\n")
             else:
                 table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                     + customer_responsibility + "\n"
-                                                                    + implementation_details + "\n")
+                                                                     + teams + "\n" + implementation_details + "\n")
         else:
             table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
-                                                               + implementation_details + "\n")
+                                                               + teams + "\n" + implementation_details + "\n")
 
     else:#letter, part, no enhancement
         if customer_responsibility:
@@ -156,14 +176,14 @@ def add_implementation_to_table(table, implementation_object, control_parts):
                                                                 + "Part " + control_parts['part_num'] + ":" + "\n"
                                                                 + "Customer Responsibility:" +  "\n"
                                                                 + customer_responsibility + "\n"
-                                                                + implementation_details + "\n")
+                                                                + teams + "\n" + implementation_details + "\n")
             else:
                 table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                 + "Part " + control_parts['part_num'] + ":" + "\n"
                                                                 + customer_responsibility + "\n"
-                                                                + implementation_details + "\n")
+                                                                + teams + "\n" + implementation_details + "\n")
         else:
             table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                + "Part " + control_parts['part_num'] + ":" + "\n"
-                                                               + implementation_details + "\n")
+                                                               + teams + "\n" + implementation_details + "\n")
     
