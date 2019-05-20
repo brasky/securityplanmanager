@@ -47,6 +47,10 @@ def generate_docx_ssp(baseline):
                         matching_implementation_group = Implementation.objects.filter(control=matched_control)
                         matching_implementation = matching_implementation_group[0]
                         control_to_implementation[matched_control.number] = matching_implementation_group
+                        if "SC" in  matched_control.number:
+                            print("SC matching multiple controls")
+                            print(matched_control.number)
+                            print(matching_controls)
                         # print(matching_implementation)
                     
                     rows = len(table.rows)
@@ -112,9 +116,13 @@ def generate_docx_ssp(baseline):
                     implementation = control_to_implementation[matched_control.number]
                     # print(implementation)
                     if isinstance(implementation, QuerySet):
+                        count = 0
                         for imp in implementation:
+                            if count > 0:
+                                imp.customer_responsibility = ""
                             # print("more than one imp")
                             add_implementation_to_table(table, imp, control_parts)
+                            count += 1
                     else:
                         # print("one or fewer imp")
                         add_implementation_to_table(table, implementation, control_parts)
