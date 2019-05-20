@@ -34,9 +34,12 @@ def generate_docx_ssp(baseline):
                     matching_controls = Control.objects.filter(Q(number__contains=control) & ~Q(number__contains=' '))
                     if not matching_controls:
                         control = control_parent
-                        matching_controls = Control.objects.filter(Q(number__contains=control) & ~Q(number__contains=' '))
+                        matching_controls = Control.objects.filter(Q(number=control))
                 else:
-                    control = control_parent
+                    if " " not in control_parent:
+                        control = control_parent.replace("(", " (")
+                    else:
+                        control = control_parent
                     matching_controls = Control.objects.filter(Q(number__contains=control))
                 previous_matched = matching_controls
                 for matched_control in matching_controls:
@@ -47,10 +50,7 @@ def generate_docx_ssp(baseline):
                         matching_implementation_group = Implementation.objects.filter(control=matched_control)
                         matching_implementation = matching_implementation_group[0]
                         control_to_implementation[matched_control.number] = matching_implementation_group
-                        if "SC" in  matched_control.number:
-                            print("SC matching multiple controls")
-                            print(matched_control.number)
-                            print(matching_controls)
+
                         # print(matching_implementation)
                     
                     rows = len(table.rows)
