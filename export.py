@@ -13,7 +13,6 @@ from docx.oxml.ns import qn, nsmap
 import sys
 from django.db.models.query import QuerySet
 from openpyxl import load_workbook
-from openpyxl.writer.excel import save_virtual_workbook
 
 
 namespace = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w14': 'http://schemas.microsoft.com/office/word/2010/wordml' }
