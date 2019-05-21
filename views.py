@@ -11,7 +11,7 @@ from django.shortcuts import redirect
 from django.forms import modelformset_factory
 from django.db.models import Count
 from .ssp_parser import parse_ssp
-from .export import generate_docx_ssp
+from .export import generate_docx_ssp, generate_cis_xlsx
 from timeit import default_timer as timer
 from collections import defaultdict
 
@@ -315,6 +315,8 @@ def export_home(request):
 def export_download(request, doc_name, baseline, format):
     if doc_name == 'ssp' and format == 'docx' and baseline == 'high':
         return generate_docx_ssp(baseline)
+    elif doc_name == "cis" and format == "xlsx" and baseline == "high":
+        return generate_cis_xlsx(baseline)
 
     return redirect('/')
 

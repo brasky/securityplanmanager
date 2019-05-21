@@ -12,6 +12,7 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn, nsmap
 import sys
 from django.db.models.query import QuerySet
+from openpyxl import load_workbook
 
 
 namespace = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w14': 'http://schemas.microsoft.com/office/word/2010/wordml' }
@@ -194,4 +195,81 @@ def add_implementation_to_table(table, implementation_object, control_parts):
             table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                + "Part " + control_parts['part_num'] + ":" + "\n"
                                                                + teams + "\n" + implementation_details + "\n")
+
+
+def generate_cis_xlsx(baseline):
+    template = __package__ + '\static\\fedramp_templates\\' + baseline + "-cis" '.xlsx'
+    workbook = load_workbook(os.path.join(settings.BASE_DIR, template))
+    cis_worksheet = workbook['CIS']
+    crm_worksheet = workbook['Customer Responsibility Matrix']
+    for row in cis_worksheet:
+        if row[0].row > 3 and row[1].value != None:
+            control = row[1].value.replace('-0', '-').replace('(0', '(')
+            matching_controls = Control.objects.filter(Q(number__contains=control))
+            if isinstance(matching_controls, QuerySet):
+                matched_control = matching_controls[0]
+            else:
+                matched_control = matching_controls
+            
+            matching_implementations = Implementation.objects.filter(Q(control=matched_control))
+            if isinstance(matching_implementations, QuerySet) and matching_implementations:
+                matched_implementation = matching_implementations[0]
+            else:
+                if matching_implementations:
+                    matched_implementation = matching_implementations
+                else:
+                    continue
+            implementation_status = matched_implementation.implementation_status
+            implementation_status_cell = get_implementation_status_row(implementation_status)
+            row[implementation_status_cell].value = "x"
+
+            for control_origination in matched_implementation.control_origination.all():
+                control_origination_cell = get_control_origination_cell(control_origination.source)
+                row[control_origination_cell].value = "x"
     
+    customer_responsibility_implementations = Implementation.objects.exclude(customer_responsibility__isnull=True).exclude(customer_responsibility__exact='')
+    customer_responsibility_rows = []
+    ref = 1
+    row_num = 4
+    for implementation in customer_responsibility_implementations:
+        crm_worksheet.cell(row_num, 1).value = ref
+        crm_worksheet.cell(row_num, 2).value = implementation.customer_responsibility.replace('Customer Responsibility:', '').strip()
+        crm_worksheet.cell(row_num, 3).value = implementation.control.number
+        ref += 1
+        row_num += 1
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=high-cis.xlsx'
+    workbook.save(response)
+    return response
+
+
+def get_control_origination_cell(control_origination):
+    if control_origination == "SPC":
+        return 7
+    elif control_origination == "SPS":
+        return 8
+    elif control_origination == "SPH":
+        return 9
+    elif control_origination == "CBC":
+        return 10
+    elif control_origination == "PBC":
+        return 11
+    elif control_origination == "SHA":
+        return 12
+    elif control_origination == "INH":
+        return 13
+    elif control_origination == "NOT":
+        return 14
+
+def get_implementation_status_row(implementation_status):
+    if implementation_status == "IM":
+        return 2
+    elif implementation_status == "PI":
+        return 3
+    elif implementation_status == "PL":
+        return 4
+    elif implementation_status == "AI":
+        return 5
+    elif implementation_status == "NA":
+        return 6
