@@ -227,6 +227,18 @@ def generate_cis_xlsx(baseline):
             for control_origination in matched_implementation.control_origination.all():
                 control_origination_cell = get_control_origination_cell(control_origination.source)
                 row[control_origination_cell].value = "x"
+    
+    customer_responsibility_implementations = Implementation.objects.exclude(customer_responsibility__isnull=True).exclude(customer_responsibility__exact='')
+    customer_responsibility_rows = []
+    ref = 1
+    row_num = 4
+    for implementation in customer_responsibility_implementations:
+        crm_worksheet.cell(row_num, 1).value = ref
+        crm_worksheet.cell(row_num, 2).value = implementation.customer_responsibility.replace('Customer Responsibility:', '').strip()
+        crm_worksheet.cell(row_num, 3).value = implementation.control.number
+        ref += 1
+        row_num += 1
+
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=high-cis.xlsx'
     workbook.save(response)
