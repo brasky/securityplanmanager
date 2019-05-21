@@ -224,12 +224,32 @@ def generate_cis_xlsx(baseline):
             implementation_status_cell = get_implementation_status_row(implementation_status)
             row[implementation_status_cell].value = "x"
 
-
-
+            for control_origination in matched_implementation.control_origination.all():
+                control_origination_cell = get_control_origination_cell(control_origination.source)
+                row[control_origination_cell].value = "x"
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=high-cis.xlsx'
     workbook.save(response)
     return response
+
+
+def get_control_origination_cell(control_origination):
+    if control_origination == "SPC":
+        return 7
+    elif control_origination == "SPS":
+        return 8
+    elif control_origination == "SPH":
+        return 9
+    elif control_origination == "CBC":
+        return 10
+    elif control_origination == "PBC":
+        return 11
+    elif control_origination == "SHA":
+        return 12
+    elif control_origination == "INH":
+        return 13
+    elif control_origination == "NOT":
+        return 14
 
 def get_implementation_status_row(implementation_status):
     if implementation_status == "IM":
