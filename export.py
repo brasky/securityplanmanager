@@ -111,6 +111,7 @@ def generate_docx_ssp(baseline):
 
             elif "solution" in table_title:
                 matching_controls = previous_matched
+                
                 for matched_control in matching_controls:
                     control_parts = get_control_parts(matched_control.number)
                     # print("getting implementation")
@@ -153,8 +154,9 @@ def add_implementation_to_table(table, implementation_object, control_parts):
     teams = ", ".join(map(str, teams))
     teams += ":"
     customer_responsibility = implementation_object.customer_responsibility
+    
     if  not control_parts['part_letter'] and not control_parts['part_num']: #no letter, no part, no enhancement
-        if customer_responsibility:
+        if customer_responsibility and customer_responsibility not in table.cell(0, 1).text:
             if "Customer Responsibility:" not in customer_responsibility:
                 table.cell(0, 1).text += "\n" + "Customer Responsibility:" + "\n" + customer_responsibility + "\n" + teams + "\n" + implementation_details
             else:
@@ -164,7 +166,7 @@ def add_implementation_to_table(table, implementation_object, control_parts):
 
     elif not control_parts['part_num']:#letter, no part, no enhancement
         
-        if customer_responsibility:
+        if customer_responsibility and customer_responsibility not in table.cell(control_parts['part_letter'], 1).text:
             if "Customer Responsibility:" not in customer_responsibility:
                 table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                 + "Customer Responsibility:" + "\n"
@@ -179,7 +181,12 @@ def add_implementation_to_table(table, implementation_object, control_parts):
                                                                + teams + "\n" + implementation_details + "\n")
 
     else:#letter, part, no enhancement
-        if customer_responsibility:
+        if implementation_details in table.cell(control_parts['part_letter'], 1).text:
+            table.cell(control_parts['part_letter'], 1).text = table.cell(control_parts['part_letter'], 1).text.replace(str(int(control_parts['part_num'])-1) + ":",
+                                                                                                                         str(int(control_parts['part_num'])-1) + "," + control_parts['part_num'] + ":")
+            return
+        
+        if customer_responsibility and customer_responsibility not in table.cell(control_parts['part_letter'], 1).text:
             if "Customer Responsibility:" not in customer_responsibility:
                 table.cell(control_parts['part_letter'], 1).text = (table.cell(control_parts['part_letter'], 1).text
                                                                 + "Part " + control_parts['part_num'] + ":" + "\n"
