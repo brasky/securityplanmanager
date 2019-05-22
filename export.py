@@ -63,21 +63,24 @@ def generate_docx_ssp(baseline):
                                 table.cell(row,0).text = cell_text + " " + matching_implementation.responsible_role
                         elif "Parameter" in cell_text:
                             try:
-                                if matched_control.number + ":" in cell_text:
-                                    table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
-                                elif '-1:' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                if '-1:' in cell_text and (matched_control.number.replace(' ', '') in cell_text or matched_control.number in cell_text):
                                     sub_param = matching_implementation.parameter.split('2:')[0]
                                     table.cell(row, 0).text = table.cell(row, 0).text + ' ' + sub_param.replace('1:', '').strip()
-                                elif '-2:' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                elif '-2:' in cell_text and (matched_control.number.replace(' ', '') in cell_text or matched_control.number in cell_text):
                                     sub_param = matching_implementation.parameter.split('3:')[0].split('2:')[1]
                                     table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
-                                elif '-3:' in cell_text and matched_control.number.replace(' ', '') in cell_text:
-                                    sub_param = matching_implementation.parameter.split(':4')[0].split('3:')[1]
+                                elif '-3:' in cell_text and (matched_control.number.replace(' ', '') in cell_text or matched_control.number in cell_text):
+                                    sub_param = matching_implementation.parameter.split('4:')[0].split('3:')[1]
                                     table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
-                                elif '-4' in cell_text and matched_control.number.replace(' ', '') in cell_text:
+                                elif '-4:' in cell_text and (matched_control.number.replace(' ', '') in cell_text or matched_control.number in cell_text):
                                     sub_param = matching_implementation.parameter.split('4:')[1]
                                     table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
-                            except IndexError:
+                                elif matched_control.number + ":" in cell_text or matched_control.number.replace(" ", "") in cell_text:
+                                    table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
+                            except IndexError as e:
+                                print("Index Error in Params")
+                                print(table_title)
+                                print(e)
                                 table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
                             
                         elif "Implementation" in cell_text:
