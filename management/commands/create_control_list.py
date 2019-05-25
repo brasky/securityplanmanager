@@ -2,6 +2,7 @@ import xmltodict
 from re import sub
 import re, csv
 from collections import defaultdict
+import openpyxl
 
 control_catalog = {}
 guidance_catalog = {}
@@ -226,6 +227,15 @@ with open('baselines.csv', 'w', newline='') as f:
         row.append(control[1]['HIGH'])
         rows.append(row)
     w.writerows(rows)
+
+wb = openpyxl.Workbook()
+ws = wb.active
+
+with open('baselines.csv') as f:
+    reader = csv.reader(f, delimiter=':')
+    for row in reader:
+        ws.append(row)
+wb.save('baselines.xlsx')
 
 print("Done")
 
