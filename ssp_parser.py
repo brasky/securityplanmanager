@@ -43,7 +43,7 @@ def get_part_text(implementation_details, control_parts):
             return part_text
 
 
-def create_implementation(new_implementation):
+def create_implementation(new_implementation, certification):
     """
     create_implementation(dict) -> None
 
@@ -74,7 +74,7 @@ def create_implementation(new_implementation):
         new_implementation_object.save()
         new_implementation_object.control_origination.set(new_implementation['control_origination'])
         new_implementation_object.teams.set(new_implementation['teams'])
-        cert = Certification.objects.get(name__contains="High")
+        cert = Certification.objects.get(name__contains=certification)
         cert.implementations.add(new_implementation_object)
     except:
         e = sys.exc_info()[0]
@@ -178,7 +178,7 @@ def get_control_origination_from_cell(control_origination_cell):
 namespace = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
 implementations = []
 
-def parse_ssp(file):
+def parse_ssp(file, certification):
     document = Document(file)
     for table in document.tables:
         try:
@@ -244,7 +244,7 @@ def parse_ssp(file):
                                 'parameter': parameter,
                                 'responsible_role': responsible_role
                             }
-                            create_implementation(new_implementation)
+                            create_implementation(new_implementation, certification)
 
             elif len(control_parent) == 4:
                 control = control_parent.replace('-0', '-') + "("
@@ -272,7 +272,7 @@ def parse_ssp(file):
                                 'parameter': parameter,
                                 'responsible_role': responsible_role
                             }
-                            create_implementation(new_implementation)
+                            create_implementation(new_implementation, certification)
 
             elif ' ' in control_parent and "Req." not in control_parent: #enhancements with spaces
                 control = control_parent.replace('-0', '-')
@@ -297,7 +297,7 @@ def parse_ssp(file):
                                 'parameter': parameter,
                                 'responsible_role': responsible_role
                             }
-                            create_implementation(new_implementation)
+                            create_implementation(new_implementation, certification)
                     
             elif "Req." not in control_parent: #enhancements without spaces
                 control_base = control_parent[:5]
@@ -334,7 +334,7 @@ def parse_ssp(file):
                                 'parameter': parameter,
                                 'responsible_role': responsible_role
                             }
-                            create_implementation(new_implementation)
+                            create_implementation(new_implementation, certification)
 
 
 def split_implementations(implementation_details):

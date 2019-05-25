@@ -298,7 +298,9 @@ def import_ssp(request):
         print(form.errors)
         if form.is_valid():
             start = timer()
-            parse_ssp(request.FILES['file'])
+            data = form.cleaned_data
+            certification = data['certification']
+            parse_ssp(request.FILES['file'], certification)
             end = timer()
             time = end - start
             print('SSP Parser took: ' + str(time))
