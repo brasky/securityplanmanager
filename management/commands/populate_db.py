@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from control_search.models import Control, Implementation
+from securityplanmanager.models import Control, Implementation
 import csv
 import os
 from collections import defaultdict
@@ -12,7 +12,7 @@ class Command(BaseCommand):
     def handle(self, *Args, **options):
         Control.objects.all().delete()
         control_list_file = csv.reader(
-            open('control_search\management\commands\control-list.csv', 'r'))
+            open('securityplanmanager\management\commands\control-list.csv', 'r'))
         control_list = dict(control_list_file)
 #        control_numbers, control_text = get_control()
         controls_created = 0
@@ -29,7 +29,7 @@ class Command(BaseCommand):
 
                 controls_created += 1
         control_list_file = csv.reader(
-            open('control_search\management\commands\control_guidance_list.csv', 'r'))
+            open('securityplanmanager\management\commands\control_guidance_list.csv', 'r'))
         control_list = dict(control_list_file)
         for num, text in control_list.items():
             control_object = Control.objects.filter(number=num).get()
@@ -50,7 +50,7 @@ class Command(BaseCommand):
 #         return baselines_catalog
 
 def set_control_baselines():
-    baselines_wb = load_workbook('control_search\management\commands\\baselines.xlsx')
+    baselines_wb = load_workbook('securityplanmanager\management\commands\\baselines.xlsx')
     high_baseline = baselines_wb['High Baseline Controls']
     mod_baselines = baselines_wb['Moderate Baseline Controls']
     low_baselines = baselines_wb['Low Baseline Controls']

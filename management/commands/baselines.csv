@@ -1,0 +1,724 @@
+AC-1(a)(1),True,True,True
+AC-1(a)(2),True,True,True
+AC-1(b)(1),True,True,True
+AC-1(b)(2),True,True,True
+AC-2(a),True,True,True
+AC-2(b),True,True,True
+AC-2(c),True,True,True
+AC-2(d),True,True,True
+AC-2(e),True,True,True
+AC-2(f),True,True,True
+AC-2(g),True,True,True
+AC-2(h)(1),True,True,True
+AC-2(h)(2),True,True,True
+AC-2(h)(3),True,True,True
+AC-2(i)(1),True,True,True
+AC-2(i)(2),True,True,True
+AC-2(i)(3),True,True,True
+AC-2(j),True,True,True
+AC-2(k),True,True,True
+AC-2 (1),False,True,True
+AC-2 (2),False,True,True
+AC-2 (3),False,True,True
+AC-2 (4),False,True,True
+AC-2 (5),False,False,True
+AC-2 (11),False,False,True
+AC-2 (12)(a),False,False,True
+AC-2 (12)(b),False,False,True
+AC-2 (13),False,False,True
+AC-3,True,True,True
+AC-4,False,True,True
+AC-5(a),False,True,True
+AC-5(b),False,True,True
+AC-5(c),False,True,True
+AC-6,False,True,True
+AC-6 (1),False,True,True
+AC-6 (2),False,True,True
+AC-6 (3),False,False,True
+AC-6 (5),False,True,True
+AC-6 (9),False,True,True
+AC-6 (10),False,True,True
+AC-7(a),True,True,True
+AC-7(b),True,True,True
+AC-8(a)(1),True,True,True
+AC-8(a)(2),True,True,True
+AC-8(a)(3),True,True,True
+AC-8(a)(4),True,True,True
+AC-8(b),True,True,True
+AC-8(c)(1),True,True,True
+AC-8(c)(2),True,True,True
+AC-8(c)(3),True,True,True
+AC-10,False,False,True
+AC-11(a),False,True,True
+AC-11(b),False,True,True
+AC-11 (1),False,True,True
+AC-12,False,True,True
+AC-14(a),True,True,True
+AC-14(b),True,True,True
+AC-17(a),True,True,True
+AC-17(b),True,True,True
+AC-17 (1),False,True,True
+AC-17 (2),False,True,True
+AC-17 (3),False,True,True
+AC-17 (4)(a),False,True,True
+AC-17 (4)(b),False,True,True
+AC-18(a),True,True,True
+AC-18(b),True,True,True
+AC-18 (1),False,True,True
+AC-18 (4),False,False,True
+AC-18 (5),False,False,True
+AC-19(a),True,True,True
+AC-19(b),True,True,True
+AC-19 (5),False,True,True
+AC-20(a),True,True,True
+AC-20(b),True,True,True
+AC-20 (1)(a),False,True,True
+AC-20 (1)(b),False,True,True
+AC-20 (2),False,True,True
+AC-21(a),False,True,True
+AC-21(b),False,True,True
+AC-22(a),True,True,True
+AC-22(b),True,True,True
+AC-22(c),True,True,True
+AC-22(d),True,True,True
+AT-1(a)(1),True,True,True
+AT-1(a)(2),True,True,True
+AT-1(b)(1),True,True,True
+AT-1(b)(2),True,True,True
+AT-2(a),True,True,True
+AT-2(b),True,True,True
+AT-2(c),True,True,True
+AT-2 (2),False,True,True
+AT-3(a),True,True,True
+AT-3(b),True,True,True
+AT-3(c),True,True,True
+AT-4(a),True,True,True
+AT-4(b),True,True,True
+AU-1(a)(1),True,True,True
+AU-1(a)(2),True,True,True
+AU-1(b)(1),True,True,True
+AU-1(b)(2),True,True,True
+AU-2(a),True,True,True
+AU-2(b),True,True,True
+AU-2(c),True,True,True
+AU-2(d),True,True,True
+AU-2 (3),False,True,True
+AU-3,True,True,True
+AU-3 (1),False,True,True
+AU-3 (2),False,False,True
+AU-4,True,True,True
+AU-5(a),True,True,True
+AU-5(b),True,True,True
+AU-5 (1),False,False,True
+AU-5 (2),False,False,True
+AU-6(a),True,True,True
+AU-6(b),True,True,True
+AU-6 (1),False,True,True
+AU-6 (3),False,True,True
+AU-6 (5),False,False,True
+AU-6 (6),False,False,True
+AU-7(a),False,True,True
+AU-7(b),False,True,True
+AU-7 (1),False,True,True
+AU-8(a),True,True,True
+AU-8(b),True,True,True
+AU-8 (1)(a),False,True,True
+AU-8 (1)(b),False,True,True
+AU-9,True,True,True
+AU-9 (2),False,False,True
+AU-9 (3),False,False,True
+AU-9 (4),False,True,True
+AU-10,False,False,True
+AU-11,True,True,True
+AU-12(a),True,True,True
+AU-12(b),True,True,True
+AU-12(c),True,True,True
+AU-12 (1),False,False,True
+AU-12 (3),False,False,True
+CA-1(a)(1),True,True,True
+CA-1(a)(2),True,True,True
+CA-1(b)(1),True,True,True
+CA-1(b)(2),True,True,True
+CA-2(a)(1),True,True,True
+CA-2(a)(2),True,True,True
+CA-2(a)(3),True,True,True
+CA-2(b),True,True,True
+CA-2(c),True,True,True
+CA-2(d),True,True,True
+CA-2 (1),False,True,True
+CA-2 (2),False,False,True
+CA-3(a),True,True,True
+CA-3(b),True,True,True
+CA-3(c),True,True,True
+CA-3 (5),False,True,True
+CA-5(a),True,True,True
+CA-5(b),True,True,True
+CA-6(a),True,True,True
+CA-6(b),True,True,True
+CA-6(c),True,True,True
+CA-7(a),True,True,True
+CA-7(b),True,True,True
+CA-7(c),True,True,True
+CA-7(d),True,True,True
+CA-7(e),True,True,True
+CA-7(f),True,True,True
+CA-7(g),True,True,True
+CA-7 (1),False,True,True
+CA-8,False,False,True
+CA-9(a),True,True,True
+CA-9(b),True,True,True
+CM-1(a)(1),True,True,True
+CM-1(a)(2),True,True,True
+CM-1(b)(1),True,True,True
+CM-1(b)(2),True,True,True
+CM-2,True,True,True
+CM-2 (1)(a),False,True,True
+CM-2 (1)(b),False,True,True
+CM-2 (1)(c),False,True,True
+CM-2 (2),False,False,True
+CM-2 (3),False,True,True
+CM-2 (7)(a),False,True,True
+CM-2 (7)(b),False,True,True
+CM-3(a),False,True,True
+CM-3(b),False,True,True
+CM-3(c),False,True,True
+CM-3(d),False,True,True
+CM-3(e),False,True,True
+CM-3(f),False,True,True
+CM-3(g),False,True,True
+CM-3 (1)(a),False,False,True
+CM-3 (1)(b),False,False,True
+CM-3 (1)(c),False,False,True
+CM-3 (1)(d),False,False,True
+CM-3 (1)(e),False,False,True
+CM-3 (1)(f),False,False,True
+CM-3 (2),False,True,True
+CM-4,True,True,True
+CM-4 (1),False,False,True
+CM-5,False,True,True
+CM-5 (1),False,False,True
+CM-5 (2),False,False,True
+CM-5 (3),False,False,True
+CM-6(a),True,True,True
+CM-6(b),True,True,True
+CM-6(c),True,True,True
+CM-6(d),True,True,True
+CM-6 (1),False,False,True
+CM-6 (2),False,False,True
+CM-7(a),True,True,True
+CM-7(b),True,True,True
+CM-7 (1)(a),False,True,True
+CM-7 (1)(b),False,True,True
+CM-7 (2),False,True,True
+CM-7 (4)(a),False,True,False
+CM-7 (4)(b),False,True,False
+CM-7 (4)(c),False,True,False
+CM-7 (5)(a),False,False,True
+CM-7 (5)(b),False,False,True
+CM-7 (5)(c),False,False,True
+CM-8(a)(1),True,True,True
+CM-8(a)(2),True,True,True
+CM-8(a)(3),True,True,True
+CM-8(a)(4),True,True,True
+CM-8(b),True,True,True
+CM-8 (1),False,True,True
+CM-8 (2),False,False,True
+CM-8 (3)(a),False,True,True
+CM-8 (3)(b),False,True,True
+CM-8 (4),False,False,True
+CM-8 (5),False,True,True
+CM-9(a),False,True,True
+CM-9(b),False,True,True
+CM-9(c),False,True,True
+CM-9(d),False,True,True
+CM-10(a),True,True,True
+CM-10(b),True,True,True
+CM-10(c),True,True,True
+CM-11(a),True,True,True
+CM-11(b),True,True,True
+CM-11(c),True,True,True
+CP-1(a)(1),True,True,True
+CP-1(a)(2),True,True,True
+CP-1(b)(1),True,True,True
+CP-1(b)(2),True,True,True
+CP-2(a)(1),True,True,True
+CP-2(a)(2),True,True,True
+CP-2(a)(3),True,True,True
+CP-2(a)(4),True,True,True
+CP-2(a)(5),True,True,True
+CP-2(a)(6),True,True,True
+CP-2(b),True,True,True
+CP-2(c),True,True,True
+CP-2(d),True,True,True
+CP-2(e),True,True,True
+CP-2(f),True,True,True
+CP-2(g),True,True,True
+CP-2 (1),False,True,True
+CP-2 (2),False,False,True
+CP-2 (3),False,True,True
+CP-2 (4),False,False,True
+CP-2 (5),False,False,True
+CP-2 (8),False,True,True
+CP-3(a),True,True,True
+CP-3(b),True,True,True
+CP-3(c),True,True,True
+CP-3 (1),False,False,True
+CP-4(a),True,True,True
+CP-4(b),True,True,True
+CP-4(c),True,True,True
+CP-4 (1),False,True,True
+CP-4 (2)(a),False,False,True
+CP-4 (2)(b),False,False,True
+CP-6(a),False,True,True
+CP-6(b),False,True,True
+CP-6 (1),False,True,True
+CP-6 (2),False,False,True
+CP-6 (3),False,True,True
+CP-7(a),False,True,True
+CP-7(b),False,True,True
+CP-7(c),False,True,True
+CP-7 (1),False,True,True
+CP-7 (2),False,True,True
+CP-7 (3),False,True,True
+CP-7 (4),False,False,True
+CP-8,False,True,True
+CP-8 (1)(a),False,True,True
+CP-8 (1)(b),False,True,True
+CP-8 (2),False,True,True
+CP-8 (3),False,False,True
+CP-8 (4)(a),False,False,True
+CP-8 (4)(b),False,False,True
+CP-8 (4)(c),False,False,True
+CP-9(a),True,True,True
+CP-9(b),True,True,True
+CP-9(c),True,True,True
+CP-9(d),True,True,True
+CP-9 (1),False,True,True
+CP-9 (2),False,False,True
+CP-9 (3),False,False,True
+CP-9 (5),False,False,True
+CP-10,True,True,True
+CP-10 (2),False,True,True
+CP-10 (4),False,False,True
+IA-1(a)(1),True,True,True
+IA-1(a)(2),True,True,True
+IA-1(b)(1),True,True,True
+IA-1(b)(2),True,True,True
+IA-2,True,True,True
+IA-2 (1),True,True,True
+IA-2 (2),False,True,True
+IA-2 (3),False,True,True
+IA-2 (4),False,False,True
+IA-2 (8),False,True,True
+IA-2 (9),False,False,True
+IA-2 (11),False,True,True
+IA-2 (12),True,True,True
+IA-3,False,True,True
+IA-4(a),True,True,True
+IA-4(b),True,True,True
+IA-4(c),True,True,True
+IA-4(d),True,True,True
+IA-4(e),True,True,True
+IA-5(a),True,True,True
+IA-5(b),True,True,True
+IA-5(c),True,True,True
+IA-5(d),True,True,True
+IA-5(e),True,True,True
+IA-5(f),True,True,True
+IA-5(g),True,True,True
+IA-5(h),True,True,True
+IA-5(i),True,True,True
+IA-5(j),True,True,True
+IA-5 (1)(a),True,True,True
+IA-5 (1)(b),True,True,True
+IA-5 (1)(c),True,True,True
+IA-5 (1)(d),True,True,True
+IA-5 (1)(e),True,True,True
+IA-5 (1)(f),True,True,True
+IA-5 (2)(a),False,True,True
+IA-5 (2)(b),False,True,True
+IA-5 (2)(c),False,True,True
+IA-5 (2)(d),False,True,True
+IA-5 (3),False,True,True
+IA-5 (11),True,True,True
+IA-6,True,True,True
+IA-7,True,True,True
+IA-8,True,True,True
+IA-8 (1),True,True,True
+IA-8 (2),True,True,True
+IA-8 (3),True,True,True
+IA-8 (4),True,True,True
+IR-1(a)(1),True,True,True
+IR-1(a)(2),True,True,True
+IR-1(b)(1),True,True,True
+IR-1(b)(2),True,True,True
+IR-2(a),True,True,True
+IR-2(b),True,True,True
+IR-2(c),True,True,True
+IR-2 (1),False,False,True
+IR-2 (2),False,False,True
+IR-3,False,True,True
+IR-3 (2),False,True,True
+IR-4(a),True,True,True
+IR-4(b),True,True,True
+IR-4(c),True,True,True
+IR-4 (1),False,True,True
+IR-4 (4),False,False,True
+IR-5,True,True,True
+IR-5 (1),False,False,True
+IR-6(a),True,True,True
+IR-6(b),True,True,True
+IR-6 (1),False,True,True
+IR-7,True,True,True
+IR-7 (1),False,True,True
+IR-8(a)(1),True,True,True
+IR-8(a)(2),True,True,True
+IR-8(a)(3),True,True,True
+IR-8(a)(4),True,True,True
+IR-8(a)(5),True,True,True
+IR-8(a)(6),True,True,True
+IR-8(a)(7),True,True,True
+IR-8(a)(8),True,True,True
+IR-8(b),True,True,True
+IR-8(c),True,True,True
+IR-8(d),True,True,True
+IR-8(e),True,True,True
+IR-8(f),True,True,True
+MA-1(a)(1),True,True,True
+MA-1(a)(2),True,True,True
+MA-1(b)(1),True,True,True
+MA-1(b)(2),True,True,True
+MA-2(a),True,True,True
+MA-2(b),True,True,True
+MA-2(c),True,True,True
+MA-2(d),True,True,True
+MA-2(e),True,True,True
+MA-2(f),True,True,True
+MA-2 (2)(a),False,False,True
+MA-2 (2)(b),False,False,True
+MA-3,False,True,True
+MA-3 (1),False,True,True
+MA-3 (2),False,True,True
+MA-3 (3)(a),False,False,True
+MA-3 (3)(b),False,False,True
+MA-3 (3)(c),False,False,True
+MA-3 (3)(d),False,False,True
+MA-4(a),True,True,True
+MA-4(b),True,True,True
+MA-4(c),True,True,True
+MA-4(d),True,True,True
+MA-4(e),True,True,True
+MA-4 (2),False,True,True
+MA-4 (3)(a),False,False,True
+MA-4 (3)(b),False,False,True
+MA-5(a),True,True,True
+MA-5(b),True,True,True
+MA-5(c),True,True,True
+MA-5 (1)(a)(1),False,False,True
+MA-5 (1)(a)(2),False,False,True
+MA-5 (1)(b),False,False,True
+MA-6,False,True,True
+MP-1(a)(1),True,True,True
+MP-1(a)(2),True,True,True
+MP-1(b)(1),True,True,True
+MP-1(b)(2),True,True,True
+MP-2,True,True,True
+MP-3(a),False,True,True
+MP-3(b),False,True,True
+MP-4(a),False,True,True
+MP-4(b),False,True,True
+MP-5(a),False,True,True
+MP-5(b),False,True,True
+MP-5(c),False,True,True
+MP-5(d),False,True,True
+MP-5 (4),False,True,True
+MP-6(a),True,True,True
+MP-6(b),True,True,True
+MP-6 (1),False,False,True
+MP-6 (2),False,False,True
+MP-6 (3),False,False,True
+MP-7,True,True,True
+MP-7 (1),False,True,True
+PE-1(a)(1),True,True,True
+PE-1(a)(2),True,True,True
+PE-1(b)(1),True,True,True
+PE-1(b)(2),True,True,True
+PE-2(a),True,True,True
+PE-2(b),True,True,True
+PE-2(c),True,True,True
+PE-2(d),True,True,True
+PE-3(a)(1),True,True,True
+PE-3(a)(2),True,True,True
+PE-3(b),True,True,True
+PE-3(c),True,True,True
+PE-3(d),True,True,True
+PE-3(e),True,True,True
+PE-3(f),True,True,True
+PE-3(g),True,True,True
+PE-3 (1),False,False,True
+PE-4,False,True,True
+PE-5,False,True,True
+PE-6(a),True,True,True
+PE-6(b),True,True,True
+PE-6(c),True,True,True
+PE-6 (1),False,True,True
+PE-6 (4),False,False,True
+PE-8(a),True,True,True
+PE-8(b),True,True,True
+PE-8 (1),False,False,True
+PE-9,False,True,True
+PE-10(a),False,True,True
+PE-10(b),False,True,True
+PE-10(c),False,True,True
+PE-11,False,True,True
+PE-11 (1),False,False,True
+PE-12,True,True,True
+PE-13,True,True,True
+PE-13 (1),False,False,True
+PE-13 (2),False,False,True
+PE-13 (3),False,True,True
+PE-14(a),True,True,True
+PE-14(b),True,True,True
+PE-15,True,True,True
+PE-15 (1),False,False,True
+PE-16,True,True,True
+PE-17(a),False,True,True
+PE-17(b),False,True,True
+PE-17(c),False,True,True
+PE-18,False,False,True
+PL-1(a)(1),True,True,True
+PL-1(a)(2),True,True,True
+PL-1(b)(1),True,True,True
+PL-1(b)(2),True,True,True
+PL-2(a)(1),True,True,True
+PL-2(a)(2),True,True,True
+PL-2(a)(3),True,True,True
+PL-2(a)(4),True,True,True
+PL-2(a)(5),True,True,True
+PL-2(a)(6),True,True,True
+PL-2(a)(7),True,True,True
+PL-2(a)(8),True,True,True
+PL-2(a)(9),True,True,True
+PL-2(b),True,True,True
+PL-2(c),True,True,True
+PL-2(d),True,True,True
+PL-2(e),True,True,True
+PL-2 (3),False,True,True
+PL-4(a),True,True,True
+PL-4(b),True,True,True
+PL-4(c),True,True,True
+PL-4(d),True,True,True
+PL-4 (1),False,True,True
+PL-8(a)(1),False,True,True
+PL-8(a)(2),False,True,True
+PL-8(a)(3),False,True,True
+PL-8(b),False,True,True
+PL-8(c),False,True,True
+PS-1(a)(1),True,True,True
+PS-1(a)(2),True,True,True
+PS-1(b)(1),True,True,True
+PS-1(b)(2),True,True,True
+PS-2(a),True,True,True
+PS-2(b),True,True,True
+PS-2(c),True,True,True
+PS-3(a),True,True,True
+PS-3(b),True,True,True
+PS-4(a),True,True,True
+PS-4(b),True,True,True
+PS-4(c),True,True,True
+PS-4(d),True,True,True
+PS-4(e),True,True,True
+PS-4(f),True,True,True
+PS-4 (2),False,False,True
+PS-5(a),True,True,True
+PS-5(b),True,True,True
+PS-5(c),True,True,True
+PS-5(d),True,True,True
+PS-6(a),True,True,True
+PS-6(b),True,True,True
+PS-6(c)(1),True,True,True
+PS-6(c)(2),True,True,True
+PS-7(a),True,True,True
+PS-7(b),True,True,True
+PS-7(c),True,True,True
+PS-7(d),True,True,True
+PS-7(e),True,True,True
+PS-8(a),True,True,True
+PS-8(b),True,True,True
+RA-1(a)(1),True,True,True
+RA-1(a)(2),True,True,True
+RA-1(b)(1),True,True,True
+RA-1(b)(2),True,True,True
+RA-2(a),True,True,True
+RA-2(b),True,True,True
+RA-2(c),True,True,True
+RA-3(a),True,True,True
+RA-3(b),True,True,True
+RA-3(c),True,True,True
+RA-3(d),True,True,True
+RA-3(e),True,True,True
+RA-5(a),True,True,True
+RA-5(b)(1),True,True,True
+RA-5(b)(2),True,True,True
+RA-5(b)(3),True,True,True
+RA-5(c),True,True,True
+RA-5(d),True,True,True
+RA-5(e),True,True,True
+RA-5 (1),False,True,True
+RA-5 (2),False,True,True
+RA-5 (4),False,False,True
+RA-5 (5),False,True,True
+SA-1(a)(1),True,True,True
+SA-1(a)(2),True,True,True
+SA-1(b)(1),True,True,True
+SA-1(b)(2),True,True,True
+SA-2(a),True,True,True
+SA-2(b),True,True,True
+SA-2(c),True,True,True
+SA-3(a),True,True,True
+SA-3(b),True,True,True
+SA-3(c),True,True,True
+SA-3(d),True,True,True
+SA-4(a),True,True,True
+SA-4(b),True,True,True
+SA-4(c),True,True,True
+SA-4(d),True,True,True
+SA-4(e),True,True,True
+SA-4(f),True,True,True
+SA-4(g),True,True,True
+SA-4 (1),False,True,True
+SA-4 (2),False,True,True
+SA-4 (9),False,True,True
+SA-4 (10),True,True,True
+SA-5(a)(1),True,True,True
+SA-5(a)(2),True,True,True
+SA-5(a)(3),True,True,True
+SA-5(b)(1),True,True,True
+SA-5(b)(2),True,True,True
+SA-5(b)(3),True,True,True
+SA-5(c),True,True,True
+SA-5(d),True,True,True
+SA-5(e),True,True,True
+SA-8,False,True,True
+SA-9(a),True,True,True
+SA-9(b),True,True,True
+SA-9(c),True,True,True
+SA-9 (2),False,True,True
+SA-10(a),False,True,True
+SA-10(b),False,True,True
+SA-10(c),False,True,True
+SA-10(d),False,True,True
+SA-10(e),False,True,True
+SA-11(a),False,True,True
+SA-11(b),False,True,True
+SA-11(c),False,True,True
+SA-11(d),False,True,True
+SA-11(e),False,True,True
+SA-12,False,False,True
+SA-15(a)(1),False,False,True
+SA-15(a)(2),False,False,True
+SA-15(a)(3),False,False,True
+SA-15(a)(4),False,False,True
+SA-15(b),False,False,True
+SA-16,False,False,True
+SA-17(a),False,False,True
+SA-17(b),False,False,True
+SA-17(c),False,False,True
+SC-1(a)(1),True,True,True
+SC-1(a)(2),True,True,True
+SC-1(b)(1),True,True,True
+SC-1(b)(2),True,True,True
+SC-2,False,True,True
+SC-3,False,False,True
+SC-4,False,True,True
+SC-5,True,True,True
+SC-7(a),True,True,True
+SC-7(b),True,True,True
+SC-7(c),True,True,True
+SC-7 (3),False,True,True
+SC-7 (4)(a),False,True,True
+SC-7 (4)(b),False,True,True
+SC-7 (4)(c),False,True,True
+SC-7 (4)(d),False,True,True
+SC-7 (4)(e),False,True,True
+SC-7 (5),False,True,True
+SC-7 (7),False,True,True
+SC-7 (8),False,False,True
+SC-7 (18),False,False,True
+SC-7 (21),False,False,True
+SC-8,False,True,True
+SC-8 (1),False,True,True
+SC-10,False,True,True
+SC-12,True,True,True
+SC-12 (1),False,False,True
+SC-13,True,True,True
+SC-15(a),True,True,True
+SC-15(b),True,True,True
+SC-17,False,True,True
+SC-18(a),False,True,True
+SC-18(b),False,True,True
+SC-18(c),False,True,True
+SC-19(a),False,True,True
+SC-19(b),False,True,True
+SC-20(a),True,True,True
+SC-20(b),True,True,True
+SC-21,True,True,True
+SC-22,True,True,True
+SC-23,False,True,True
+SC-24,False,False,True
+SC-28,False,True,True
+SC-39,True,True,True
+SI-1(a)(1),True,True,True
+SI-1(a)(2),True,True,True
+SI-1(b)(1),True,True,True
+SI-1(b)(2),True,True,True
+SI-2(a),True,True,True
+SI-2(b),True,True,True
+SI-2(c),True,True,True
+SI-2(d),True,True,True
+SI-2 (1),False,False,True
+SI-2 (2),False,True,True
+SI-3(a),True,True,True
+SI-3(b),True,True,True
+SI-3(c)(1),True,True,True
+SI-3(c)(2),True,True,True
+SI-3(d),True,True,True
+SI-3 (1),False,True,True
+SI-3 (2),False,True,True
+SI-4(a)(1),True,True,True
+SI-4(a)(2),True,True,True
+SI-4(b),True,True,True
+SI-4(c)(1),True,True,True
+SI-4(c)(2),True,True,True
+SI-4(d),True,True,True
+SI-4(e),True,True,True
+SI-4(f),True,True,True
+SI-4(g),True,True,True
+SI-4 (2),False,True,True
+SI-4 (4),False,True,True
+SI-4 (5),False,True,True
+SI-5(a),True,True,True
+SI-5(b),True,True,True
+SI-5(c),True,True,True
+SI-5(d),True,True,True
+SI-5 (1),False,False,True
+SI-6(a),False,False,True
+SI-6(b),False,False,True
+SI-6(c),False,False,True
+SI-6(d),False,False,True
+SI-7,False,True,True
+SI-7 (1),False,True,True
+SI-7 (2),False,False,True
+SI-7 (5),False,False,True
+SI-7 (7),False,True,True
+SI-7 (14)(a),False,False,True
+SI-7 (14)(b),False,False,True
+SI-8(a),False,True,True
+SI-8(b),False,True,True
+SI-8 (1),False,True,True
+SI-8 (2),False,True,True
+SI-10,False,True,True
+SI-11(a),False,True,True
+SI-11(b),False,True,True
+SI-12,True,True,True
+SI-16,False,True,True
