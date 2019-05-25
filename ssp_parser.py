@@ -3,7 +3,6 @@ from docx import *
 from .models import Control, Implementation, Team, ControlOrigination, Certification
 from django.db.models import Q
 from .helper import get_control_parts
-from time import sleep
 import sys
 
 def get_customer_responsibility(implementation_details):
