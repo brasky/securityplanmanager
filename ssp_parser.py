@@ -102,18 +102,20 @@ def parse_solution_table(table, control_object, control_parts):
     elif not control_parts['part_num']:#letter, no part, no enhancement
         try:
             implementation_details = table.cell(control_parts['part_letter'],1).text
+            customer_responsibility = get_customer_responsibility(implementation_details)
+            if customer_responsibility:
+                implementation_details = implementation_details.replace(customer_responsibility, '').strip()
         except:
             print("parse solution table error:")
             # print(table.cell(4,0).text)
             print(control_number)
             print(control_parts)
             print(table.cell(0,0).text)
+            return '', ''
 
         # print(control_number)
 
-        customer_responsibility = get_customer_responsibility(implementation_details)
-        if customer_responsibility:
-            implementation_details = implementation_details.replace(customer_responsibility, '').strip()
+
         # print(customer_responsibility)
     else:#letter, part, no enhancement
         implementation_details = table.cell(control_parts['part_letter'],1).text
