@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class ControlSearchConfig(AppConfig):
-    name = 'control_search'
+class SecurityPlanManagerConfig(AppConfig):
+    name = 'securityplanmanager'
