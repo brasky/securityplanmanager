@@ -7,16 +7,15 @@
 
 <body>
 <h1 class="page-header text-center">Certifications</h1>
-
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+{{ message }}
+</div>
+{% endfor %}
+{% endif %}
 <a href="/certifications/add">Add Certification</a> - <a href="/certifications/edit">Edit Certifications</a>
 <br>
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
 <br>
 {% for certification in certifications %}
 <p>
@@ -25,16 +24,17 @@
 Percent of Controls Implemented: {{ percent_implemented | floatformat:2}}%
     <br>
 Percent of Controls Partially Implemented: {{ percent_partial | floatformat:2}}%
+<br>
+Percent of Controls Not Applicable: {{percent_na | floatformat:2}}%
 </p>
 <p>
-Stats:
+Team Stats:
 </p>
+{% for team, implemented, partial in team_data %}
 <p>
-Team1 - {{team1_percent_implemented | floatformat:2}}% Implemented, {{team1_percent_partial | floatformat:2}}% Partially Implemented
+{{ team }} - {{implemented | floatformat:2}}% Implemented, {{partial | floatformat:2}}% Partially Implemented
 </p>
-<p>
-Team2 - {{team2_percent_implemented | floatformat:2}}% Implemented, {{team2_percent_partial | floatformat:2}}% Partially Implemented
-</p>
+{% endfor %}
 <br> <br> <br> 
 {% endfor %}
 

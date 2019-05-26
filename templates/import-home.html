@@ -8,11 +8,11 @@
 <h1 class="page-header text-center">Import</h1>
 
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+{{ message }}
+</div>
+{% endfor %}
 {% endif %}
 <ul>
 <li><a href="/import/ssp/">Import SSP Word Document</a></li>
