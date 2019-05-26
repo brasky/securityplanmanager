@@ -14,11 +14,19 @@
 </ul>
 {% endif %}
 <h1 class="page-header text-center">{{team.name}} Implementations</h1>
-
-
+<p>
+<a href="/teams/">View All Teams</a>
+</p>
 {% for implementation in all_implementations %}
 <a href="/implementations/{{implementation.control.pk}}/">{{ implementation.control.number}}</a>
 <p>{{implementation.solution}}</p>
+<p>Teams with the same solution:
+<br>
+|
+{% for similar_team in implementation.teams.all %}
+{{similar_team.name}} |
+{% endfor %}
+</p>
 <br> <br> 
 {% endfor %}
 
