@@ -28,10 +28,21 @@ class AddCertificationForm(ModelForm):
         fields = ['name', 'controls']
 
 class AddTeamForm(ModelForm):
-
+    similar_team = forms.ModelChoiceField(queryset=Team.objects.all(), required=False)
     class Meta:
         model = Team
         fields = ['name']
+
+    def save(self, commit=True):
+        similar_team = self.cleaned_data['similar_team']
+        if similar_team:  
+            team_object = super(AddTeamForm, self).save(commit=commit)
+            implementations = similar_team.implementations.all()
+            for implementation in implementations:
+                implementation.teams.add(team_object)
+            return team_object
+        else:
+            return super(AddTeamForm, self).save(commit=commit)
 
 class SSPUploadForm(forms.Form):
     file = forms.FileField()
