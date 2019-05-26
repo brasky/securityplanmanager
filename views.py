@@ -155,32 +155,53 @@ def edit_implementations(request, control_pk):
 
 def certifications(request):
     # all_certifications = Certification.objects.all()
+    def calculate_percentage(num, total):
+        return (num/total) * 100
+
     data = {}
     if len(Certification.objects.all()) > 0:
         all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
         high_total_controls = all_certifications[0].num_controls
-        high_implemented_controls = len(all_certifications[0].implementations.filter(implementation_status='IM'))
-        high_partial_contorls = len(all_certifications[0].implementations.filter(implementation_status='PI'))
-        percent_partial = (high_partial_contorls/high_total_controls)*100
-        percent_implemented = (high_implemented_controls/high_total_controls)*100
-
+        high_implemented_controls = all_certifications[0].implementations.filter(implementation_status='IM').values('control').distinct().count()
+        high_partial_controls = all_certifications[0].implementations.filter(implementation_status='PI').values('control').distinct().count()
+        high_na_controls = all_certifications[0].implementations.filter(implementation_status='NA').values('control').distinct().count()
+        percent_partial = calculate_percentage(high_partial_controls, high_total_controls)
+        percent_implemented = calculate_percentage(high_implemented_controls, high_total_controls)
+        percent_na = calculate_percentage(high_na_controls, high_total_controls)
+        print("percent implemented: ")
+        print(high_implemented_controls)
+        print(percent_implemented)
         data = {'certifications': all_certifications,
                 'percent_implemented': percent_implemented,
-                'percent_partial': percent_partial,}
+                'percent_partial': percent_partial,
+                'percent_na': percent_na,}
+        teams = Team.objects.all()
+        # for team in teams:
+        #     data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
+        #     data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
+        team_data = []
         for team in Team.objects.all():
-            data[team.name + '_percent_implemented'] = (len(team.implementations.filter(implementation_status='IM'))/high_total_controls)*100
-            data[team.name + '_percent_partial'] = (len(team.implementations.filter(implementation_status='PI'))/high_total_controls)*100
+            implemented = (team.implementations.filter(implementation_status='IM').count()/high_total_controls)*100
+            partial = (team.implementations.filter(implementation_status='PI').count()/high_total_controls)*100
+            team_data.append((team, implemented, partial))
+        # teams = list(teams)
+        # data['teams'] = teams
+        data['team_data'] = team_data
     return render(request, 'certifications.html', data)
 
 def add_certification(request):
     data = {}
-    form = AddCertificationForm()
+    form = AddCertificationForm(request.POST or None)
     data['form'] = form
     if request.method == "POST":
         form = AddCertificationForm(request.POST)
         print(form.errors)
         if form.is_valid():
-            form.save()
+            data = form.cleaned_data
+            controls = data['controls']
+            implementations = Implementation.objects.filter(control__in=controls)
+            cert = form.save()
+            cert.implementations.set(implementations)
             messages.success(request, 'Certification added successfully')
             return redirect('/certifications/')
     return render(request, 'add-certification.html', data)
@@ -200,9 +221,12 @@ def edit_certifications(request):
     return render(request, 'edit-certifications.html', data)
 
 def view_certification(request, certification_name):
+    start = timer()
     cert = Certification.objects.get(name=certification_name)
     all_implementations = cert.implementations.all()
-
+    
+    end = timer()
+    time = end - start
     #controls missing implementations from teams
     all_controls = cert.controls.all()
     answered_controls = [implementation.control for implementation in all_implementations]
@@ -227,7 +251,9 @@ def view_certification(request, certification_name):
             'missing_controls': missing_controls,
             'team_missing': missing_controls_by_team}
     #control families with a percentage of how many are answered and the implementation status breakdown
-    
+    end = timer()
+    time = end - start
+    print("Certification load time: " + str(time))
     return render(request, 'view-certification.html', data)
 
 def teams(request):
