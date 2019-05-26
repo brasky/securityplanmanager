@@ -43,3 +43,7 @@ ul > li.list-unstyled:hover {
 	max-height: 500px;
 	overflow-y: auto;
 }
+
+.navbar {
+	margin-bottom: -1px
+}
