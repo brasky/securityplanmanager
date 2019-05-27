@@ -88,35 +88,37 @@ def parse_solution_table(table, control_object, control_parts):
     Takes the entire solution section of a control and splits the customer responsibility from the implementation details.
     """
     control_number = control_object.number
-    
-    if  not control_parts['part_letter'] and not control_parts['part_num']: #no letter, no part, no enhancement
-        implementation_details = table.cell(0,1).text
-        customer_responsibility = get_customer_responsibility(implementation_details)
-        if customer_responsibility:
-            implementation_details = implementation_details.replace(customer_responsibility, '').strip()
+    try:
+        if  not control_parts['part_letter'] and not control_parts['part_num']: #no letter, no part, no enhancement
+            implementation_details = table.cell(0,1).text
+            customer_responsibility = get_customer_responsibility(implementation_details)
+            if customer_responsibility:
+                implementation_details = implementation_details.replace(customer_responsibility, '').strip()
 
-    elif not control_parts['part_num']:#letter, no part, no enhancement
-        try:
+        elif not control_parts['part_num']:#letter, no part, no enhancement
+            try:
+                implementation_details = table.cell(control_parts['part_letter'],1).text
+                customer_responsibility = get_customer_responsibility(implementation_details)
+                if customer_responsibility:
+                    implementation_details = implementation_details.replace(customer_responsibility, '').strip()
+            except:
+                print("parse solution table error:")
+                # print(table.cell(4,0).text)
+                print(control_number)
+                print(control_parts)
+                print(table.cell(0,0).text)
+                return '', '' #blank implementation and customer responsibility
+
+        else:#letter, part, no enhancement
             implementation_details = table.cell(control_parts['part_letter'],1).text
             customer_responsibility = get_customer_responsibility(implementation_details)
             if customer_responsibility:
                 implementation_details = implementation_details.replace(customer_responsibility, '').strip()
-        except:
-            print("parse solution table error:")
-            # print(table.cell(4,0).text)
-            print(control_number)
-            print(control_parts)
-            print(table.cell(0,0).text)
-            return '', '' #blank implementation and customer responsibility
-
-    else:#letter, part, no enhancement
-        implementation_details = table.cell(control_parts['part_letter'],1).text
-        customer_responsibility = get_customer_responsibility(implementation_details)
-        if customer_responsibility:
-            implementation_details = implementation_details.replace(customer_responsibility, '').strip()
-    # else:
-    #     raise ValueError('A case was not handled by the implementation table section of parse ssp')
-    
+        # else:
+        #     raise ValueError('A case was not handled by the implementation table section of parse ssp')
+    except IndexError:
+        print("Table not correct in SSP for control: " + control_number)
+        return "", ""  #there's a problem with how the table is laid out in the SSP. 
     return implementation_details, customer_responsibility
 
 def get_implementation_status_from_cell(implementation_cell):
