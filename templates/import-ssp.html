@@ -8,11 +8,11 @@
 <h1 class="page-header text-center">Import SSP Word Document</h1>
 
 {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
+{% for message in messages %}
+<div class="alert alert-success" role="alert">
+{{ message }}
+</div>
+{% endfor %}
 {% endif %}
 <div class="alert alert-warning" role="alert">
     Only docx SSPs in a standard FedRAMP template are supported. 
