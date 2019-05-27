@@ -4,6 +4,7 @@ from .models import Control, Implementation, Team, ControlOrigination, Certifica
 from django.db.models import Q
 from .helper import get_control_parts
 import sys
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_customer_responsibility(implementation_details):
     teams = Team.objects.all()
@@ -359,7 +360,12 @@ def split_implementations(implementation_details):
                 team_list = []
                 solution = ''
             for team in comma_separated:
-                team_list.append(Team.objects.get(name__iexact=team.strip(' ,:')))
+                try:
+                    team_list.append(Team.objects.get(name__iexact=team.strip(' ,:')))
+                except ObjectDoesNotExist:
+                    print("Could not find team in database: " + team)
+
+
             solution_flag = True
         elif solution_flag:
             solution += line + '\n'
