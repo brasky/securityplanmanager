@@ -22,17 +22,39 @@
 {% endfor %}
 
 <h2>Implementations missing team responses:</h2>
-<br>
 {% for team, team_controls in team_missing.items %}
-{{ team }}:
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">{{team}}'s Missing Implementations</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for team_missing_control in team_controls %}
+  
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td><a href="/implementations/{{team_missing_control.pk}}">{{team_missing_control.number}}</a></td>
+    </tr>
+
+{% endfor %}
+  </tbody>
+</table>
+
+{% endfor %}
+
+{% comment %} <br>
+{% for team, team_controls in team_missing.items %}
+<a href="/teams/{{team}}">{{ team }}</a>:
 {% for team_missing_control in team_controls %}
 <br>
-{{team_missing_control.number}}
+<a href="/implementations/{{team_missing_control.pk}}">{{team_missing_control.number}}</a>
 {% endfor %}
 <br>
 <br>
 
-{% endfor %}
+{% endfor %} {% endcomment %}
 
 
 {% comment %} {% for implementation in implementations %}
