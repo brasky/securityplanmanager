@@ -14,6 +14,7 @@ from .ssp_parser import parse_ssp
 from .export import generate_docx_ssp, generate_cis_xlsx
 from timeit import default_timer as timer
 from collections import defaultdict
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 
 
@@ -162,6 +163,9 @@ def certifications(request):
     if len(Certification.objects.all()) > 0:
         all_certifications = Certification.objects.annotate(num_controls = Count('controls'))
         high_total_controls = all_certifications[0].num_controls
+        bad_controls = Control.objects.filter(high_baseline=False)
+        for implementation in Implementation.objects.filter(control__in=bad_controls):
+            all_certifications[0].controls.add(implementation.control)
         high_implemented_controls = all_certifications[0].implementations.filter(implementation_status='IM').values('control').distinct().count()
         high_partial_controls = all_certifications[0].implementations.filter(implementation_status='PI').values('control').distinct().count()
         high_na_controls = all_certifications[0].implementations.filter(implementation_status='NA').values('control').distinct().count()
@@ -170,6 +174,7 @@ def certifications(request):
         percent_na = calculate_percentage(high_na_controls, high_total_controls)
         print("percent implemented: ")
         print(high_implemented_controls)
+        print(high_total_controls)
         print(percent_implemented)
         data = {'certifications': all_certifications,
                 'percent_implemented': percent_implemented,
@@ -223,38 +228,34 @@ def edit_certifications(request):
 def view_certification(request, certification_name):
     start = timer()
     cert = Certification.objects.get(name=certification_name)
-    all_implementations = cert.implementations.all()
-    
-    end = timer()
-    time = end - start
-    #controls missing implementations from teams
-    all_controls = cert.controls.all()
-    answered_controls = [implementation.control for implementation in all_implementations]
     missing_controls = []
-    for control in all_controls:
-        if control not in answered_controls:
+    controls = cert.controls.all()
+    for control in controls:
+        try:
+            Implementation.objects.get(control=control)
+        except ObjectDoesNotExist:
             missing_controls.append(control)
-    
-    teams = Team.objects.all()
+        except MultipleObjectsReturned:
+            pass
+    cert_controls = cert.implementations.values('control').distinct()
+    cert_controls = [control['control'] for control in cert_controls]
     missing_controls_by_team = defaultdict(list)
-    for team in teams:
-        team_implementations = team.implementations.all()
-        team_answered = [implementation.control for implementation in team_implementations]
-        for control in all_controls:
-            if control not in team_answered and control in answered_controls:
-                missing_controls_by_team[team.name].append(control)
+    for team in Team.objects.all():
+        team_controls = team.implementations.all().values('control').distinct()
+        team_controls = [control['control'] for control in team_controls]
+        team_missing = set(cert_controls).difference(set(team_controls))
+        for missing_control in team_missing:
+            control = Control.objects.get(pk=missing_control)
+            missing_controls_by_team[team.name].append(control)
     missing_controls_by_team = dict(missing_controls_by_team)
-    # print(missing_controls_by_team)
-    # missing_controls_by_team = {'test': 'testing'}
     data = {'certification': cert,
-            'implementations': all_implementations,
             'missing_controls': missing_controls,
             'team_missing': missing_controls_by_team}
-    #control families with a percentage of how many are answered and the implementation status breakdown
     end = timer()
     time = end - start
     print("Certification load time: " + str(time))
     return render(request, 'view-certification.html', data)
+
 
 def teams(request):
     data = {}
@@ -304,8 +305,10 @@ def certifications_test(request):
     # controls = Control.objects.all()
     # for control in controls:
     #     control.delete()
-    # cert = Certification.objects.get(name="FedRAMP High")
+    # cert = Certification.objects.get(name="high")
+    # print(cert)
     # for control in Control.objects.filter(high_baseline=True):
+    #     print(control)
     #     cert.controls.add(control)
 
     return redirect('/import/ssp/')
