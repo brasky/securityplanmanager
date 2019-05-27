@@ -266,11 +266,12 @@ def add_team(request):
     data['form'] = AddTeamForm()
     if request.method == "POST":
         form = AddTeamForm(request.POST)
+        data['form'] = form
         print(form.errors)
         if form.is_valid():
             form.save()
             messages.success(request, 'Team added successfully')
-            return redirect('/teams/')
+            return redirect('/teams/add')
     return render(request, 'add-team.html', data)
 
 def edit_teams(request):
