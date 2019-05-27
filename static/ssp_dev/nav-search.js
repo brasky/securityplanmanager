@@ -29,23 +29,23 @@ $(function() {
     });
    });
 
-//    $(function(){
-//     $('#nav-search').keyup(function() {
-//     	if($('#nav-search').val()) {
+$(function(){
+    $('#nav-search').focus(function() {
+    	if($('#nav-search').val()) {
 
-//         $.ajax({
-//             type: "POST",
-//             url: "/nav-search/",
-//             data: { 
-//                 'search_text' : $('#nav-search').val(),
-//                 'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
-//             },
-//             success: searchSuccess,
-//             dataType: 'html'
-//         });
-//     } else { $('#nav-search-results').empty();  } 
-//     });
-// });
+        $.ajax({
+            type: "POST",
+            url: "/nav-search/",
+            data: { 
+                'search_text' : $('#nav-search').val(),
+                'csrfmiddlewaretoken' : $("input[name=csrfmiddlewaretoken]").val()
+            },
+            success: searchSuccess,
+            dataType: 'html'
+        });
+    } else { $('#nav-search-results').empty();  } 
+    });
+});
 
 function searchSuccess(data, textStatus, jqXHR)
 {
