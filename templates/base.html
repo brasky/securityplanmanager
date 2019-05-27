@@ -39,11 +39,12 @@
         
       </ul>
       <form class="navbar-form navbar-right">
-        <div class="form-group">
+        <div class="form-group" id="focusout">
           {% csrf_token  %}
          
-          <input type="text" id="nav-search" class="form-control" placeholder="Search" value="">
-          
+          <input type="text" id="nav-search" class="form-control nav-search-focus" placeholder="Search" value="">
+            <ul tabindex="4" id="nav-search-results" class="nav-search-focus">
+  </ul>
         </div>
       </form>
     </div><!-- /.navbar-collapse -->
@@ -51,12 +52,10 @@
   </div><!-- /.container-fluid -->
 
 </nav>
-  <ul id="nav-search-results">
-  </ul>
+
 <body>
 {% block content  %}
 
 {% endblock content %}
-
 <script src="{% static 'ssp_dev/nav-search.js'  %}"></script>
 </html>
