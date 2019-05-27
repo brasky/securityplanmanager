@@ -216,25 +216,16 @@ with open('control_guidance_list.csv', 'w', newline='') as f:
     w = csv.writer(f)
     w.writerows(guidance_catalog.items())
 
-with open('baselines.csv', 'w', newline='') as f:
-    w = csv.writer(f)
-    rows = []
-    for control in baseline_catalog.items():
-        row = []
-        row.append(control[0])
-        row.append(control[1]['LOW'])
-        row.append(control[1]['MODERATE'])
-        row.append(control[1]['HIGH'])
-        rows.append(row)
-    w.writerows(rows)
-
 wb = openpyxl.Workbook()
 ws = wb.active
+for control in baseline_catalog.items():
+    row = []
+    row.append(control[0])
+    row.append(control[1]['LOW'])
+    row.append(control[1]['MODERATE'])
+    row.append(control[1]['HIGH'])
+    ws.append(row)
 
-with open('baselines.csv') as f:
-    reader = csv.reader(f, delimiter=':')
-    for row in reader:
-        ws.append(row)
 wb.save('baselines.xlsx')
 
 print("Done")

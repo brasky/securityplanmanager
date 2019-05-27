@@ -39,56 +39,17 @@ class Command(BaseCommand):
         print('Controls created: ' + str(controls_created))
         print('Total controls: ' + str(len(Control.objects.all())))
 
-
-# def get_control_baselines():
-#     baselines_catalog = defaultdict(lambda: defaultdict(bool))
-#     with open('control_search\management\commands\\baselines.csv', 'r') as baselines:
-#         for row in csv.reader(baselines):
-#             baselines_catalog[row[0]] = {
-#                 'LOW': bool(row[1]), 'MODERATE': bool(row[2]), 'HIGH': bool(row[3])}
-#         # print(baselines_catalog)
-#         return baselines_catalog
-
 def set_control_baselines():
     baselines_wb = load_workbook('securityplanmanager\management\commands\\baselines.xlsx')
-    high_baseline = baselines_wb['High Baseline Controls']
-    mod_baselines = baselines_wb['Moderate Baseline Controls']
-    low_baselines = baselines_wb['Low Baseline Controls']
-    baselines = [high_baseline, mod_baselines, low_baselines]
-
-    for baseline in baselines:
-        for row in baseline:
-            if row[0].row > 2:
-                control = row[3].value
-                if control:
-                    if " " in control:
-                        matching_control = Control.objects.filter(number__contains=control)
-                        for control_instance in matching_controls:
-                            if "High" in baseline.title:
-                                control_instance.high_baseline=True
-                            elif "Moderate" in baseline.title:
-                                control_instance.mod_baseline=True
-                            elif "Low" in baseline.title:
-                                control_instance.low_baseline=True
-                            control_instance.save()
-
-                    else:
-                        matching_controls = Control.objects.filter(Q(number__contains=control + "(") & ~Q(number__contains=" "))
-                        if not matching_controls:
-                            matching_controls = Control.objects.filter(number=control)
-                        for control_instance in matching_controls:
-                            if "High" in baseline.title:
-                                control_instance.high_baseline=True
-                            elif "Moderate" in baseline.title:
-                                control_instance.mod_baseline=True
-                            elif "Low" in baseline.title:
-                                control_instance.low_baseline=True
-                            control_instance.save()
-
-
-def get_control():
-    control_numbers = ['ac-01(a)(1)', 'ac-01(a)(2)',
-                       'ac-01(a)(3)', 'ac-01(a)(4)', 'ac-01(b)(1)']
-    control_text = ['testing a 1 ', 'testing a 2',
-                    'testing a 3', 'testing a 4', 'testing b 1']
-    return control_numbers, control_text
+    baselines_ws = baselines_wb.active
+    # baselines = [high_baseline, mod_baselines, low_baselines]
+    for row in baselines_ws:
+        control = Control.objects.get(number=row[0].value)
+        low, mod, high = row[1].value, row[2].value, row[3].value
+        if low:
+            control.low_baseline=True
+        if mod:
+            control.mod_baseline=True
+        if high:
+            control.high_baseline=True
+        control.save()
