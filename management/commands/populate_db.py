@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from securityplanmanager.models import Control, Implementation
+from securityplanmanager.models import Control, Implementation, ControlOrigination
 import csv
 import os
 from collections import defaultdict
@@ -10,21 +10,15 @@ class Command(BaseCommand):
     help = 'Fill the database with controls'
 
     def handle(self, *Args, **options):
+        create_control_originations()
         Control.objects.all().delete()
         control_list_file = csv.reader(
             open('securityplanmanager\management\commands\control-list.csv', 'r'))
         control_list = dict(control_list_file)
-#        control_numbers, control_text = get_control()
         controls_created = 0
-        # control_baselines = get_control_baselines()
         for num, text in control_list.items():
             if not Control.objects.filter(number=num).exists():
                 control = Control(number=num, control_text=text)
-                # print(num)
-                # print(control_baselines[num])
-                # control.low_baseline = control_baselines[num]['LOW']
-                # control.mod_baseline=control_baselines[num]['MODERATE']
-                # control.high_baseline=control_baselines[num]['HIGH']
                 control.save()
 
                 controls_created += 1
@@ -42,14 +36,22 @@ class Command(BaseCommand):
 def set_control_baselines():
     baselines_wb = load_workbook('securityplanmanager\management\commands\\baselines.xlsx')
     baselines_ws = baselines_wb.active
-    # baselines = [high_baseline, mod_baselines, low_baselines]
     for row in baselines_ws:
         control = Control.objects.get(number=row[0].value)
         low, mod, high = row[1].value, row[2].value, row[3].value
         if low:
-            control.low_baseline=True
+            control.low_baseline = True
         if mod:
-            control.mod_baseline=True
+            control.mod_baseline = True
         if high:
-            control.high_baseline=True
+            control.high_baseline = True
         control.save()
+
+def create_control_originations():
+    """
+    Deletes all control_originations then creates one for each choice defined in the model. Returns None.
+    """
+    ControlOrigination.objects.all().delete()
+    for short, _ in ControlOrigination.CONTROL_ORIGINATION_CHOICES:
+        control_origination = ControlOrigination(source=short)
+        control_origination.save()
