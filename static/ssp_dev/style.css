@@ -54,3 +54,9 @@ ul > li.list-unstyled:hover {
 	width: 10%;
 	float: left;
 }
+
+.implementation-table {
+	width:50%;
+	float:none;
+	margin-bottom:100px;
+}

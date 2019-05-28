@@ -19,8 +19,64 @@
 
 <br>
 <br>
+<div class="control-header">Control Text:</div>
+<div class="control-text">{{control.control_text}} </div>
+{% if control.supplemental_guidance%}
+
+<div class="guidance-header">Supplemental Guidance:</div>
+<p class="list-group-item list-group-item-warning">{{control.supplemental_guidance}}</p>
+{% endif %}
+<br>
+
 
 {% for implementation in implementations %}
+<table class="table table-striped implementation-table">
+  <thead>
+    <tr>
+      <th scope="col">Teams</th>
+      <th>{% for team in implementation.teams.all %}{{team.name}} - {% endfor %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+    <tr>
+      <th scope="row">Parameters</th>
+      <td>{{implementation.parameter}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Responsible Role</th>
+      <td>{{implementation.responsible_role}}</td>
+    </tr>
+    
+    <tr>
+      <th scope="row">Control Origination</th>
+      <td>{% for control_origination in implementation.control_origination.all %} {{ control_origination.get_source_display }} <br>{% endfor %}</td>
+    </tr>
+    <tr>
+      <th scope="row">Implementation Status</th>
+      <td>{{implementation.get_implementation_status_display}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Customer Responsibility</th>
+      <td>{{implementation.customer_responsibility}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Solution</th>
+      <td>{{implementation.solution}}</td>
+    </tr>
+                
+  </tbody>
+</table>
+
+{% endfor %}
+
+
+
+
+
+
+
+{% comment %} {% for implementation in implementations %}
 Teams:
 {% for team in implementation.teams.all %}
 {{team.name}}
@@ -44,18 +100,7 @@ Teams:
 {{ implementation.customer_responsibility}}
 <br><br><br>
 <br>
-{% endfor %}
-
-
-<div class="control-header">Control Text:</div>
-<div class="control-text">{{control.control_text}} </div>
-<br>
-<br>
-{% if control.supplemental_guidance%}
-
-<div class="guidance-header">Supplemental Guidance:</div>
-<p class="list-group-item list-group-item-warning">{{control.supplemental_guidance}}</p>
-{% endif %}
+{% endfor %} {% endcomment %}
 </body>
 {%endblock content%}
 
