@@ -50,7 +50,6 @@ def create_implementation(new_implementation, certification):
 
     Takes a dictionary containing Implementation fields, creates a new Implementation object, and adds it to a certification. Does not return anything. 
     """
-
     if new_implementation['customer_resp']:
         new_implementation_object = Implementation(
             control=new_implementation['control_object'],
@@ -216,6 +215,9 @@ def parse_ssp(file, certification):
                         param_number = control[-1:] + ': '
                         control = control[:-2]
                         parameters[control] += param_number + parameter + '\n'
+                    elif "-1(a)" in control:
+                        parameters[control+"(1)"] += parameter + '\n'
+                        parameters[control+"(2)"] += parameter + '\n'
                     else:
                         parameters[control] += parameter + '\n'
         

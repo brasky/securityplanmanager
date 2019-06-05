@@ -25,7 +25,7 @@ def generate_docx_ssp(baseline):
     control_tables = {}
     control_to_implementation = {}
     for table in document.tables:
-        try:   
+        try:
             table_title = table.cell(0, 0).text
             table_title_column_two = table.cell(0, 1).text
             if "Control Summary Information" in table_title_column_two or "Control Enhancement Summary Information" in table_title_column_two:
@@ -76,6 +76,8 @@ def generate_docx_ssp(baseline):
                                     sub_param = matching_implementation.parameter.split('4:')[1]
                                     table.cell(row, 0).text = table.cell(row, 0).text + sub_param.strip()
                                 elif matched_control.number + ":" in cell_text or matched_control.number.replace(" ", "") in cell_text:
+                                    table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
+                                elif matched_control.number.replace('(1)', '') + ":" in cell_text or matched_control.number.replace('(2)', '') + ":" in cell_text and matching_implementation.parameter not in cell_text:
                                     table.cell(row, 0).text = table.cell(row, 0).text + matching_implementation.parameter
                             except IndexError as e:
                                 print("Index Error in Params")
