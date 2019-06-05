@@ -18,9 +18,9 @@
 <a href="/teams/">View All Teams</a>
 </p>
 {% for implementation in all_implementations %}
-<a href="/implementations/{{implementation.control.pk}}/">{{ implementation.control.number}}</a>
-<p>{{implementation.solution}}</p>
-<p>Teams with the same solution:
+<p class='team-view'><a href="/implementations/{{implementation.control.pk}}/">{{ implementation.control.number}}</a></p>
+<p class='team-view'>{{implementation.solution}}</p>
+<p class='team-view'>Teams with the same solution:
 <br>
 |
 {% for similar_team in implementation.teams.all %}

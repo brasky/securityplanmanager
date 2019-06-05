@@ -60,3 +60,8 @@ ul > li.list-unstyled:hover {
 	float:none;
 	margin-bottom:100px;
 }
+
+p.team-view {
+	width: 80%;
+	margin: auto;
+}
