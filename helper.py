@@ -1,5 +1,20 @@
 import re
 
+def is_enhancement(control):
+    r = r'[A-Z]*-[0-9]*\([0-9].*'
+    r = re.compile(r)
+    if r.search(control):
+        return True
+    return False
+  
+def remove_zero(control):
+    return control.replace('-0', '-')
+
+def add_space_to_extension(control):
+    regex = r'(\w\w-\d*)(.*)'
+    control = re.sub(regex, r'\1 \2', control)
+    return control
+
 def get_control_parts(control):
     control_parts = {'enhancement' : '', 'part_num': '', 'part_letter': ''}
     alpha = re.compile('[A-Za-z]')

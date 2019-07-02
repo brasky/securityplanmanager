@@ -2,7 +2,7 @@ from collections import defaultdict
 from docx import *
 from .models import Control, Implementation, Team, ControlOrigination, Certification
 from django.db.models import Q
-from .helper import get_control_parts
+from .helper import get_control_parts, is_enhancement, add_space_to_extension
 import sys
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -278,6 +278,45 @@ def parse_ssp(file, certification):
                                 'responsible_role': responsible_role
                             }
                             create_implementation(new_implementation, certification)
+            elif "Ext" in control_parent: #addendum extension and privacy controls
+                print('starting ' + control_parent)                
+                if is_enhancement(control_parent):
+                    print('>Control is enhancement ' + control_parent)
+                    control = add_space_to_extension(control_parent)
+                    print('>Control with space ' + control)
+                else:
+                    control = control_parent
+                try:
+                    control_object = Control.objects.get(number=control)
+                except Exception as e:
+                    print('>exception occurred with ' + control)
+                    print(e)
+                    
+                    continue
+                control_parts = {
+                    'enhancement': False,
+                    'part_letter': False,
+                    'part_num': False
+                }
+                implementation_details, customer_responsibility = parse_solution_table(table, control_object, control_parts)
+                parameter = parameters[control_object.number.replace(' ', '')]
+                if implementation_details:
+                        implementations_grouped_by_team = split_implementations(implementation_details)
+                        for split_implementation in implementations_grouped_by_team:
+                            teams, solution = split_implementation
+                            new_implementation = {
+                                'control_object': control_object,
+                                'solution': solution,
+                                'customer_resp': customer_responsibility,
+                                'teams': teams,
+                                'control_origination': control_originations,
+                                'implementation_status': implementation_status,
+                                'parameter': parameter,
+                                'responsible_role': responsible_role
+                            }
+                            print('>creating implementation for ' + control_object.number)
+                            create_implementation(new_implementation, certification)
+
 
             elif ' ' in control_parent and "Req." not in control_parent: #enhancements with spaces
                 control = control_parent.replace('-0', '-')

@@ -30,6 +30,7 @@ class Command(BaseCommand):
             control_object.supplemental_guidance = text
             control_object.save()
         set_control_baselines()
+        add_security_privacy_controls()
         print('Controls created: ' + str(controls_created))
         print('Total controls: ' + str(len(Control.objects.all())))
 
@@ -55,3 +56,18 @@ def create_control_originations():
     for short, _ in ControlOrigination.CONTROL_ORIGINATION_CHOICES:
         control_origination = ControlOrigination(source=short)
         control_origination.save()
+
+def add_security_privacy_controls():
+    """
+    Adds the security and privacy controls not included in NIST's 800-53 xml.
+    """
+    spc_wb = load_workbook(r'securityplanmanager\management\commands\security-privacy-controls.xlsx')
+    spc_ws = spc_wb.active
+    for row in spc_ws:
+        if row[0].row > 1:
+            
+            control = Control(number=row[0].value.strip(), control_text=row[1].value, security_privacy_baseline=True) 
+            try:
+                control.save()
+            except:
+                print("Control is not unique: " + row[0].value)
